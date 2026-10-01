@@ -21,13 +21,18 @@ export const AuthProvider: React.FC<{ children: React.ReactNode }> = ({ children
   const [currentUser, setCurrentUser] = useState<User>(() => {
     const saved = localStorage.getItem('jv_current_user');
     if (saved) {
-      try { return JSON.parse(saved); } catch (e) { /* ignore */ }
+      try {
+        const parsed = JSON.parse(saved);
+        if (parsed && parsed.role && parsed.id) return parsed;
+      } catch (e) { /* ignore */ }
     }
     return DEMO_USERS[0]; // Default Super Admin
   });
 
   useEffect(() => {
-    localStorage.setItem('jv_current_user', JSON.stringify(currentUser));
+    if (currentUser) {
+      localStorage.setItem('jv_current_user', JSON.stringify(currentUser));
+    }
   }, [currentUser]);
 
   const setRole = (role: Role) => {
@@ -79,16 +84,17 @@ export const AuthProvider: React.FC<{ children: React.ReactNode }> = ({ children
     });
   };
 
-  const isSuperAdmin = currentUser.role === 'Super Admin';
-  const isEditor = currentUser.role === 'Editor' || currentUser.role === 'Editor-in-Chief' || isSuperAdmin;
-  const isReporter = currentUser.role === 'Reporter' || isEditor;
-  const isSocialManager = currentUser.role === 'Social Media Manager' || isSuperAdmin;
+  const role = currentUser?.role || 'Super Admin';
+  const isSuperAdmin = role === 'Super Admin';
+  const isEditor = role === 'Editor' || role === 'Editor-in-Chief' || isSuperAdmin;
+  const isReporter = role === 'Reporter' || isEditor;
+  const isSocialManager = role === 'Social Media Manager' || isSuperAdmin;
 
   return (
     <AuthContext.Provider
       value={{
         currentUser,
-        currentRole: currentUser.role,
+        currentRole: role,
         setRole,
         loginAs,
         logout,

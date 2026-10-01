@@ -29,12 +29,14 @@ export class MockNewsService {
     return this.memoryCache;
   }
 
-  private static saveArticles(articles: Article[]): void {
+  private static saveArticles(articles: Article[], shouldNotify = true): void {
     try {
       this.memoryCache = articles;
       localStorage.setItem(STORAGE_KEY, JSON.stringify(articles));
       // Dispatch custom event so reactive UI across tabs or components updates
-      window.dispatchEvent(new Event('articles-updated'));
+      if (shouldNotify) {
+        window.dispatchEvent(new Event('articles-updated'));
+      }
     } catch (e) {
       console.error('Failed to save articles to localStorage', e);
     }
@@ -201,9 +203,11 @@ export class MockNewsService {
   }
 
   static incrementViews(id: string): void {
-    const article = this.getById(id);
-    if (article) {
-      this.update(id, { views: article.views + 1 });
+    const articles = this.getAll();
+    const index = articles.findIndex(a => a.id === id);
+    if (index !== -1) {
+      articles[index] = { ...articles[index], views: articles[index].views + 1 };
+      this.saveArticles(articles, false);
     }
   }
 

@@ -7,18 +7,23 @@ export class MockAdService {
   private static memoryCache: Advertisement[] | null = null;
 
   private static getStoredAds(): Advertisement[] {
-    if (this.memoryCache) return this.memoryCache;
+    if (this.memoryCache && this.memoryCache.length > 0) return this.memoryCache;
     try {
       const data = localStorage.getItem(ADS_STORAGE_KEY);
       if (data) {
-        this.memoryCache = JSON.parse(data);
-        return this.memoryCache!;
+        const parsed = JSON.parse(data);
+        if (Array.isArray(parsed) && parsed.length > 0) {
+          this.memoryCache = parsed;
+          return this.memoryCache!;
+        }
       }
     } catch (e) {
       console.error('Failed to parse ads from localStorage', e);
     }
     this.memoryCache = MOCK_ADVERTISEMENTS;
-    localStorage.setItem(ADS_STORAGE_KEY, JSON.stringify(MOCK_ADVERTISEMENTS));
+    try {
+      localStorage.setItem(ADS_STORAGE_KEY, JSON.stringify(MOCK_ADVERTISEMENTS));
+    } catch (e) {}
     return this.memoryCache;
   }
 
