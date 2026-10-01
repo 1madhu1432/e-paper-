@@ -9,19 +9,18 @@ interface AdBannerProps {
 }
 
 export const AdBanner: React.FC<AdBannerProps> = ({ placement, className = '' }) => {
-  const [ad, setAd] = useState<Advertisement | undefined>(undefined);
+  const [ad, setAd] = useState<Advertisement | undefined>(() => MockAdService.getActiveByPlacement(placement));
 
-  const loadAd = () => {
+  useEffect(() => {
     const active = MockAdService.getActiveByPlacement(placement);
     setAd(active);
     if (active) {
       MockAdService.trackImpression(active.id);
     }
-  };
 
-  useEffect(() => {
-    loadAd();
-    const handler = () => loadAd();
+    const handler = () => {
+      setAd(MockAdService.getActiveByPlacement(placement));
+    };
     window.addEventListener('ads-updated', handler);
     return () => window.removeEventListener('ads-updated', handler);
   }, [placement]);

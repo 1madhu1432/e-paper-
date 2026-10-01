@@ -22,11 +22,13 @@ export class MockAdService {
     return this.memoryCache;
   }
 
-  private static saveAds(ads: Advertisement[]): void {
+  private static saveAds(ads: Advertisement[], shouldNotify = true): void {
     try {
       this.memoryCache = ads;
       localStorage.setItem(ADS_STORAGE_KEY, JSON.stringify(ads));
-      window.dispatchEvent(new Event('ads-updated'));
+      if (shouldNotify) {
+        window.dispatchEvent(new Event('ads-updated'));
+      }
     } catch (e) {
       console.error('Failed to save ads to localStorage', e);
     }
@@ -98,16 +100,20 @@ export class MockAdService {
   }
 
   static trackImpression(id: string): void {
-    const ad = this.getById(id);
-    if (ad) {
-      this.update(id, { impressions: ad.impressions + 1 });
+    const ads = this.getAll();
+    const index = ads.findIndex(a => a.id === id);
+    if (index !== -1) {
+      ads[index] = { ...ads[index], impressions: (ads[index].impressions || 0) + 1 };
+      this.saveAds(ads, false);
     }
   }
 
   static trackClick(id: string): void {
-    const ad = this.getById(id);
-    if (ad) {
-      this.update(id, { clicks: ad.clicks + 1 });
+    const ads = this.getAll();
+    const index = ads.findIndex(a => a.id === id);
+    if (index !== -1) {
+      ads[index] = { ...ads[index], clicks: (ads[index].clicks || 0) + 1 };
+      this.saveAds(ads, false);
     }
   }
 }
