@@ -25,7 +25,7 @@ export const CategoryPage: React.FC = () => {
     description: 'సమగ్ర తాజా సమాచారం',
   };
 
-  const [articles, setArticles] = useState<Article[]>([]);
+  const [articles, setArticles] = useState<Article[]>(() => MockNewsService.getByCategory(categorySlug));
   const [selectedSub, setSelectedSub] = useState<string>('all');
   const [sortBy, setSortBy] = useState<'latest' | 'popular'>('latest');
   const [currentPage, setCurrentPage] = useState<number>(1);
@@ -36,8 +36,10 @@ export const CategoryPage: React.FC = () => {
     setArticles(list);
     setSelectedSub('all');
     setCurrentPage(1);
-    window.scrollTo({ top: 0, behavior: 'smooth' });
-  }, [categorySlug]);
+    try {
+      window.scrollTo(0, 0);
+    } catch (e) {}
+  }, [categorySlug, location.pathname]);
 
   // Extract unique subcategories or districts
   const subcategories = Array.from(

@@ -1,5 +1,5 @@
 import React, { useState, useEffect } from 'react';
-import { NavLink, Link } from 'react-router-dom';
+import { NavLink, Link, useLocation } from 'react-router-dom';
 import { Home, Zap, Video, FileText, MoreHorizontal, Bookmark, Settings, AlertCircle, Shield, X } from 'lucide-react';
 import { useSavedArticles } from '../../context/SavedArticlesContext';
 import { useAuth } from '../../context/AuthContext';
@@ -8,6 +8,12 @@ export const MobileBottomNav: React.FC = () => {
   const [showMoreSheet, setShowMoreSheet] = useState(false);
   const { savedIds } = useSavedArticles();
   const { isSuperAdmin, isEditor, isReporter } = useAuth();
+  const location = useLocation();
+
+  useEffect(() => {
+    setShowMoreSheet(false);
+    document.body.style.overflow = '';
+  }, [location.pathname]);
 
   useEffect(() => {
     if (showMoreSheet) {
@@ -26,6 +32,10 @@ export const MobileBottomNav: React.FC = () => {
           <NavLink
             to="/"
             end
+            onClick={() => {
+              setShowMoreSheet(false);
+              try { window.scrollTo(0, 0); } catch (e) {}
+            }}
             className={({ isActive }) =>
               `flex flex-col items-center justify-center py-1 px-2.5 rounded-lg transition-colors ${
                 isActive ? 'text-red-600 font-bold' : 'text-slate-600 hover:text-slate-900'
@@ -38,7 +48,10 @@ export const MobileBottomNav: React.FC = () => {
 
           <NavLink
             to="/latest"
-            onClick={() => window.scrollTo({ top: 0, behavior: 'smooth' })}
+            onClick={() => {
+              setShowMoreSheet(false);
+              try { window.scrollTo(0, 0); } catch (e) {}
+            }}
             title="తాజా వార్తలు (Latest News)"
             className={({ isActive }) =>
               `flex flex-col items-center justify-center py-1 px-2.5 rounded-lg transition-colors cursor-pointer ${

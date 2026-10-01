@@ -82,8 +82,14 @@ export const VideoSection: React.FC<VideoSectionProps> = ({ videos }) => {
 
       {/* Video Player Modal */}
       {activeVideoModal && (
-        <div className="fixed inset-0 z-50 bg-black/80 backdrop-blur-md flex items-center justify-center p-4">
-          <div className="bg-slate-900 border border-slate-700 rounded-2xl overflow-hidden max-w-3xl w-full shadow-2xl animate-in zoom-in-95">
+        <div
+          className="fixed inset-0 z-50 bg-black/80 backdrop-blur-md flex items-center justify-center p-4 cursor-pointer"
+          onClick={() => setActiveVideoModal(null)}
+        >
+          <div
+            className="bg-slate-900 border border-slate-700 rounded-2xl overflow-hidden max-w-3xl w-full shadow-2xl animate-in zoom-in-95 cursor-default"
+            onClick={e => e.stopPropagation()}
+          >
             <div className="flex items-center justify-between p-3 border-b border-slate-800">
               <span className="text-xs font-bold text-amber-400">{activeVideoModal.type}</span>
               <button

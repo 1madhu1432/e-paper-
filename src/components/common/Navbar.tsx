@@ -1,5 +1,5 @@
 import React, { useState, useEffect } from 'react';
-import { Link, NavLink, useNavigate } from 'react-router-dom';
+import { Link, NavLink, useNavigate, useLocation } from 'react-router-dom';
 import { 
   Search, 
   FileText, 
@@ -34,6 +34,16 @@ export const Navbar: React.FC = () => {
   const { savedIds } = useSavedArticles();
   const { currentUser, isEditor, isReporter, isSuperAdmin, logout } = useAuth();
   const navigate = useNavigate();
+  const location = useLocation();
+
+  // Reset all menus, drawer, dropdowns, and body scroll whenever route changes
+  useEffect(() => {
+    setMobileMenuOpen(false);
+    setProfileMenuOpen(false);
+    setNotifDropdownOpen(false);
+    setShowSearchInput(false);
+    document.body.style.overflow = '';
+  }, [location.pathname]);
 
   useEffect(() => {
     const handleKeyDown = (e: KeyboardEvent) => {
@@ -127,7 +137,16 @@ export const Navbar: React.FC = () => {
         </button>
 
         {/* Brand Logo */}
-        <Link to="/" className="flex flex-col items-center sm:items-start group">
+        <Link
+          to="/"
+          onClick={() => {
+            setMobileMenuOpen(false);
+            setProfileMenuOpen(false);
+            setNotifDropdownOpen(false);
+            try { window.scrollTo(0, 0); } catch (e) {}
+          }}
+          className="flex flex-col items-center sm:items-start group"
+        >
           <div className="flex items-baseline gap-2">
             <span className="text-2xl sm:text-4xl lg:text-5xl font-black tracking-tight text-red-600 drop-shadow-xs font-telugu">
               జనతా వాణి
@@ -398,7 +417,16 @@ export const Navbar: React.FC = () => {
         <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
           <div className="flex items-center justify-between">
             {/* Brand Logo in sticky nav bar */}
-            <Link to="/" className="font-black text-white text-lg font-telugu mr-4 shrink-0 hidden sm:block">
+            <Link
+              to="/"
+              onClick={() => {
+                setMobileMenuOpen(false);
+                setProfileMenuOpen(false);
+                setNotifDropdownOpen(false);
+                try { window.scrollTo(0, 0); } catch (e) {}
+              }}
+              className="font-black text-white text-lg font-telugu mr-4 shrink-0 hidden sm:block"
+            >
               జనతా వాణి
             </Link>
 
@@ -407,6 +435,12 @@ export const Navbar: React.FC = () => {
               <NavLink
                 to="/"
                 end
+                onClick={() => {
+                  setMobileMenuOpen(false);
+                  setProfileMenuOpen(false);
+                  setNotifDropdownOpen(false);
+                  try { window.scrollTo(0, 0); } catch (e) {}
+                }}
                 className={({ isActive }) =>
                   `px-3 py-1 rounded-md shrink-0 transition-colors ${
                     isActive ? 'bg-black/30 text-amber-300 font-bold' : 'hover:bg-black/20 text-white'
@@ -420,7 +454,12 @@ export const Navbar: React.FC = () => {
                 <NavLink
                   key={cat.id}
                   to={`/${cat.slug}`}
-                  onClick={() => window.scrollTo({ top: 0, behavior: 'smooth' })}
+                  onClick={() => {
+                    setMobileMenuOpen(false);
+                    setProfileMenuOpen(false);
+                    setNotifDropdownOpen(false);
+                    try { window.scrollTo(0, 0); } catch (e) {}
+                  }}
                   className={({ isActive }) =>
                     `px-2.5 py-1 rounded-md shrink-0 transition-colors cursor-pointer ${
                       isActive ? 'bg-black/30 text-amber-300 font-bold' : 'hover:bg-black/20 text-white/95'

@@ -169,8 +169,14 @@ export const JobsPage: React.FC = () => {
 
       {/* Job Details Modal */}
       {selectedJob && (
-        <div className="fixed inset-0 z-50 bg-black/60 backdrop-blur-xs flex items-center justify-center p-4">
-          <div className="bg-white rounded-3xl max-w-lg w-full p-6 shadow-2xl border border-slate-100 space-y-4 animate-in zoom-in-95">
+        <div
+          className="fixed inset-0 z-50 bg-black/60 backdrop-blur-xs flex items-center justify-center p-4 cursor-pointer"
+          onClick={() => setSelectedJob(null)}
+        >
+          <div
+            className="bg-white rounded-3xl max-w-lg w-full p-6 shadow-2xl border border-slate-100 space-y-4 animate-in zoom-in-95 cursor-default"
+            onClick={e => e.stopPropagation()}
+          >
             <div className="flex items-start justify-between border-b pb-4">
               <div>
                 <span className="text-xs bg-blue-50 text-blue-700 font-bold px-2.5 py-0.5 rounded-full border border-blue-200">

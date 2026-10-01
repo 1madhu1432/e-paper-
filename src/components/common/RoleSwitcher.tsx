@@ -9,6 +9,10 @@ export const RoleSwitcher: React.FC = () => {
   const [isOpen, setIsOpen] = useState(false);
   const location = useLocation();
 
+  React.useEffect(() => {
+    setIsOpen(false);
+  }, [location.pathname]);
+
   const roles: { role: Role; label: string; icon: any; color: string; path: string }[] = [
     { role: 'Super Admin', label: 'Super Admin (పూర్తి యాక్సెస్)', icon: ShieldCheck, color: 'bg-red-600 text-white', path: '/admin' },
     { role: 'Editor', label: 'Editor (సమీక్ష & ఆమోదం)', icon: Edit3, color: 'bg-indigo-600 text-white', path: '/admin/editor-workspace' },

@@ -28,7 +28,7 @@ import { TrendingSidebar } from '../../components/public/TrendingSidebar';
 
 export const ArticleDetailPage: React.FC = () => {
   const { slug } = useParams<{ slug: string }>();
-  const [article, setArticle] = useState<Article | undefined>(undefined);
+  const [article, setArticle] = useState<Article | undefined>(() => slug ? MockNewsService.getBySlug(slug) : undefined);
   const [reactions, setReactions] = useState<{ likes: number; loves: number; userReacted: string | null }>({
     likes: 142,
     loves: 89,
@@ -66,7 +66,9 @@ export const ArticleDetailPage: React.FC = () => {
       setArticle(found);
       if (found) {
         MockNewsService.incrementViews(found.id);
-        window.scrollTo({ top: 0, behavior: 'smooth' });
+        try {
+          window.scrollTo(0, 0);
+        } catch (e) {}
       }
     }
   }, [slug]);
