@@ -14,8 +14,8 @@ import { Flame, Sparkles, TrendingUp, ChevronRight } from 'lucide-react';
 import { Link } from 'react-router-dom';
 
 export const HomePage: React.FC = () => {
-  const [allArticles, setAllArticles] = useState<Article[]>([]);
-  const [videos, setVideos] = useState<VideoItem[]>([]);
+  const [allArticles, setAllArticles] = useState<Article[]>(() => MockNewsService.getPublished());
+  const [videos, setVideos] = useState<VideoItem[]>(() => MockVideoService.getAll());
 
   const loadData = () => {
     setAllArticles(MockNewsService.getPublished());

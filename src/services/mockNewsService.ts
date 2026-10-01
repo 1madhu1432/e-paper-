@@ -1,7 +1,7 @@
 import { Article, ArticleStatus } from '../types';
 import { MOCK_ARTICLES } from '../data/mockArticles';
 
-const STORAGE_KEY = 'jv_articles_data_v1';
+const STORAGE_KEY = 'jv_articles_data_v2';
 
 export class MockNewsService {
   private static memoryCache: Article[] | null = null;
