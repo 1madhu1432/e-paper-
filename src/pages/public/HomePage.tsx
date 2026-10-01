@@ -70,14 +70,18 @@ export const HomePage: React.FC = () => {
           {/* Latest News Feed Strip */}
           <div className="bg-white rounded-2xl p-5 border border-slate-200/80 shadow-xs">
             <div className="flex items-center justify-between pb-3 mb-4 border-b border-slate-100">
-              <div className="flex items-center gap-2">
-                <span className="w-2.5 h-6 bg-red-600 rounded-xs" />
-                <h3 className="text-xl font-black font-telugu text-slate-900">
+              <Link to="/latest" className="flex items-center gap-2 group cursor-pointer" title="తాజా వార్తల పేజీకి వెళ్లండి">
+                <span className="w-2.5 h-6 bg-red-600 rounded-xs group-hover:scale-110 transition-transform" />
+                <h3 className="text-xl font-black font-telugu text-slate-900 group-hover:text-red-600 transition-colors">
                   తాజా వార్తలు (Latest Updates)
                 </h3>
-              </div>
-              <Link to="/latest" className="text-xs font-bold text-red-600 hover:underline flex items-center">
-                మరిన్ని <ChevronRight className="w-4 h-4" />
+              </Link>
+              <Link
+                to="/latest"
+                className="text-xs font-bold text-red-600 hover:text-red-700 bg-red-50 hover:bg-red-100 px-3 py-1.5 rounded-lg flex items-center gap-1 transition-colors"
+                title="అన్ని తాజా వార్తలు చూడండి"
+              >
+                <span>మరిన్ని వార్తలు</span> <ChevronRight className="w-4 h-4" />
               </Link>
             </div>
             <div className="space-y-3">

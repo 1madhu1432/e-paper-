@@ -127,18 +127,37 @@ export const CategoryPage: React.FC = () => {
           ))}
         </div>
 
-        {/* Sort Select */}
-        <div className="flex items-center gap-2 text-xs font-semibold text-slate-600 shrink-0 self-end sm:self-auto">
-          <SlidersHorizontal className="w-4 h-4 text-slate-400" />
-          <span>క్రమబద్ధీకరించు:</span>
-          <select
-            value={sortBy}
-            onChange={e => setSortBy(e.target.value as any)}
-            className="bg-slate-100 border border-slate-300 rounded-lg px-2.5 py-1 text-xs focus:outline-none focus:ring-1 focus:ring-red-500 font-medium"
+        {/* Sort Buttons */}
+        <div className="flex items-center gap-1.5 text-xs font-semibold shrink-0 self-end sm:self-auto">
+          <span className="text-slate-400 hidden sm:inline mr-1">క్రమబద్ధీకరించు:</span>
+          <button
+            onClick={() => {
+              setSortBy('latest');
+              setCurrentPage(1);
+            }}
+            className={`px-3 py-1.5 rounded-lg text-xs font-bold transition-all flex items-center gap-1 cursor-pointer ${
+              sortBy === 'latest'
+                ? 'bg-red-600 text-white shadow-xs'
+                : 'bg-slate-100 text-slate-700 hover:bg-slate-200'
+            }`}
+            title="తాజా వార్తల ప్రకారం క్రమబద్ధీకరించండి"
           >
-            <option value="latest">తాజా వార్తలు (Latest)</option>
-            <option value="popular">అత్యధిక వీక్షణలు (Most Viewed)</option>
-          </select>
+            <span>తాజా వార్తలు (Latest)</span>
+          </button>
+          <button
+            onClick={() => {
+              setSortBy('popular');
+              setCurrentPage(1);
+            }}
+            className={`px-3 py-1.5 rounded-lg text-xs font-bold transition-all flex items-center gap-1 cursor-pointer ${
+              sortBy === 'popular'
+                ? 'bg-red-600 text-white shadow-xs'
+                : 'bg-slate-100 text-slate-700 hover:bg-slate-200'
+            }`}
+            title="అత్యధిక వీక్షణల ప్రకారం క్రమబద్ధీకరించండి"
+          >
+            <span>అత్యధిక వీక్షణలు</span>
+          </button>
         </div>
       </div>
 

@@ -38,8 +38,10 @@ export const MobileBottomNav: React.FC = () => {
 
           <NavLink
             to="/latest"
+            onClick={() => window.scrollTo({ top: 0, behavior: 'smooth' })}
+            title="తాజా వార్తలు (Latest News)"
             className={({ isActive }) =>
-              `flex flex-col items-center justify-center py-1 px-2.5 rounded-lg transition-colors ${
+              `flex flex-col items-center justify-center py-1 px-2.5 rounded-lg transition-colors cursor-pointer ${
                 isActive ? 'text-red-600 font-bold' : 'text-slate-600 hover:text-slate-900'
               }`
             }

@@ -35,13 +35,17 @@ export const BreakingTicker: React.FC = () => {
   return (
     <div className="bg-gradient-to-r from-red-700 via-red-600 to-rose-700 text-white shadow-md border-b border-red-800">
       <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 py-2 flex items-center gap-3">
-        {/* Badge */}
-        <div className="flex items-center gap-1.5 bg-black/40 backdrop-blur-sm px-2.5 py-1 rounded text-xs font-black tracking-wider uppercase shrink-0 border border-white/20">
+        {/* Clickable Breaking News Badge */}
+        <Link
+          to="/latest"
+          className="flex items-center gap-1.5 bg-black/40 hover:bg-black/60 transition-colors backdrop-blur-sm px-2.5 py-1 rounded text-xs font-black tracking-wider uppercase shrink-0 border border-white/20 cursor-pointer group"
+          title="తాజా బ్రేకింగ్ వార్తలు"
+        >
           <span className="w-2 h-2 rounded-full bg-red-400 animate-ping" />
-          <Flame className="w-3.5 h-3.5 text-amber-300 fill-amber-300" />
-          <span className="hidden sm:inline">బ్రేకింగ్ న్యూస్</span>
-          <span className="sm:hidden">బ్రేకింగ్</span>
-        </div>
+          <Flame className="w-3.5 h-3.5 text-amber-300 fill-amber-300 group-hover:scale-110 transition-transform" />
+          <span className="hidden sm:inline">తాజా బ్రేకింగ్</span>
+          <span className="sm:hidden">తాజా</span>
+        </Link>
 
         {/* Content */}
         <div className="flex-1 overflow-hidden min-w-0">

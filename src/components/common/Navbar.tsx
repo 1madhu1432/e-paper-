@@ -420,8 +420,9 @@ export const Navbar: React.FC = () => {
                 <NavLink
                   key={cat.id}
                   to={`/${cat.slug}`}
+                  onClick={() => window.scrollTo({ top: 0, behavior: 'smooth' })}
                   className={({ isActive }) =>
-                    `px-2.5 py-1 rounded-md shrink-0 transition-colors ${
+                    `px-2.5 py-1 rounded-md shrink-0 transition-colors cursor-pointer ${
                       isActive ? 'bg-black/30 text-amber-300 font-bold' : 'hover:bg-black/20 text-white/95'
                     }`
                   }
