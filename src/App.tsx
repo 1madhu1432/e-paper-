@@ -117,7 +117,10 @@ function App() {
                     <Route path="/privacy" element={<AboutPage />} />
                     <Route path="/terms" element={<TermsPage />} />
                     <Route path="/404" element={<NotFoundPage />} />
+                    <Route path="*" element={<NotFoundPage />} />
                   </Route>
+
+                  {/* Admin Login (standalone page, no layout) */}
 
                   {/* Admin Login (standalone page, no layout) */}
                   <Route path="/admin/login" element={<AdminLoginPage />} />
@@ -155,11 +158,6 @@ function App() {
                     <Route path="security" element={<AdminSettingsPage />} />
                     <Route path="backups" element={<AdminSettingsPage />} />
                     <Route path="settings" element={<AdminSettingsPage />} />
-                  </Route>
-
-                  {/* 404 Fallback */}
-                  <Route path="*" element={<PublicLayout />}>
-                    <Route path="*" element={<NotFoundPage />} />
                   </Route>
                 </Routes>
               </Suspense>

@@ -23,7 +23,6 @@ import { useSavedArticles } from '../../context/SavedArticlesContext';
 import { useAuth } from '../../context/AuthContext';
 
 export const Navbar: React.FC = () => {
-  const [isScrolled, setIsScrolled] = useState(false);
   const [mobileMenuOpen, setMobileMenuOpen] = useState(false);
   const [searchQuery, setSearchQuery] = useState('');
   const [showSearchInput, setShowSearchInput] = useState(false);
@@ -37,9 +36,6 @@ export const Navbar: React.FC = () => {
   const navigate = useNavigate();
 
   useEffect(() => {
-    const handleScroll = () => {
-      setIsScrolled(window.scrollY > 120);
-    };
     const handleKeyDown = (e: KeyboardEvent) => {
       if (e.key === 'Escape') {
         setMobileMenuOpen(false);
@@ -48,13 +44,22 @@ export const Navbar: React.FC = () => {
         setShowSearchInput(false);
       }
     };
-    window.addEventListener('scroll', handleScroll);
     window.addEventListener('keydown', handleKeyDown);
     return () => {
-      window.removeEventListener('scroll', handleScroll);
       window.removeEventListener('keydown', handleKeyDown);
     };
   }, []);
+
+  useEffect(() => {
+    if (mobileMenuOpen) {
+      document.body.style.overflow = 'hidden';
+    } else {
+      document.body.style.overflow = '';
+    }
+    return () => {
+      document.body.style.overflow = '';
+    };
+  }, [mobileMenuOpen]);
 
   const handleSearchSubmit = (e: React.FormEvent) => {
     e.preventDefault();
@@ -392,12 +397,10 @@ export const Navbar: React.FC = () => {
       <nav className="sticky top-0 z-40 w-full bg-[#990000] text-white shadow-md">
         <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
           <div className="flex items-center justify-between">
-            {/* Logo in sticky mode */}
-            {isScrolled && (
-              <Link to="/" className="font-black text-white text-lg font-telugu mr-4 shrink-0 hidden sm:block">
-                జనతా వాణి
-              </Link>
-            )}
+            {/* Brand Logo in sticky nav bar */}
+            <Link to="/" className="font-black text-white text-lg font-telugu mr-4 shrink-0 hidden sm:block">
+              జనతా వాణి
+            </Link>
 
             {/* Horizontal Scrollable Categories */}
             <div className="flex items-center overflow-x-auto no-scrollbar py-2 sm:py-2.5 gap-1 sm:gap-2 text-xs sm:text-sm font-semibold tracking-wide">
