@@ -1,4 +1,4 @@
-import React, { useState } from 'react';
+import React, { useState, useEffect } from 'react';
 import {
   Video,
   Plus,
@@ -16,6 +16,11 @@ import { VideoItem } from '../../types';
 export const AdminVideoPage: React.FC = () => {
   const [videosList, setVideosList] = useState<VideoItem[]>(MOCK_VIDEOS as any);
   const [showAddModal, setShowAddModal] = useState(false);
+
+  useEffect(() => {
+    document.body.style.overflow = showAddModal ? 'hidden' : '';
+    return () => { document.body.style.overflow = ''; };
+  }, [showAddModal]);
 
   // New Video Form State
   const [titleTe, setTitleTe] = useState('');

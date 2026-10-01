@@ -35,6 +35,7 @@ import { ProfilePage } from './pages/public/ProfilePage';
 import { PreferencesPage } from './pages/public/PreferencesPage';
 import { TermsPage } from './pages/public/TermsPage';
 import { NotFoundPage } from './pages/public/NotFoundPage';
+import { PrivacyPage } from './pages/public/PrivacyPage';
 
 // Admin Pages
 import { AdminDashboard } from './pages/admin/AdminDashboard';
@@ -114,7 +115,7 @@ function App() {
                     <Route path="/profile" element={<ProfilePage />} />
                     <Route path="/preferences" element={<PreferencesPage />} />
                     {/* Privacy & Terms */}
-                    <Route path="/privacy" element={<AboutPage />} />
+                    <Route path="/privacy" element={<PrivacyPage />} />
                     <Route path="/terms" element={<TermsPage />} />
                     <Route path="/404" element={<NotFoundPage />} />
                     <Route path="*" element={<NotFoundPage />} />

@@ -77,7 +77,7 @@ export const Navbar: React.FC = () => {
   const formattedTeluguDate = `${today.getDate()} ${monthsTe[today.getMonth()]}, ${today.getFullYear()} | ${daysTe[today.getDay()]}`;
 
   return (
-    <header className="w-full bg-white z-40 relative">
+    <header className="w-full bg-white sticky top-0 z-40 shadow-sm">
       {/* Top Utility Bar (Desktop) */}
       <div className="bg-slate-900 text-slate-300 text-xs py-1.5 border-b border-slate-800">
         <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 flex items-center justify-between">
@@ -393,8 +393,8 @@ export const Navbar: React.FC = () => {
         </div>
       </div>
 
-      {/* Primary Category Navigation Bar (Sticky on Scroll) */}
-      <nav className="sticky top-0 z-40 w-full bg-[#990000] text-white shadow-md">
+      {/* Primary Category Navigation Bar */}
+      <nav className="w-full bg-[#990000] text-white shadow-md">
         <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
           <div className="flex items-center justify-between">
             {/* Brand Logo in sticky nav bar */}

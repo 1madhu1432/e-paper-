@@ -1,4 +1,4 @@
-import React, { useState, useMemo } from 'react';
+import React, { useState, useMemo, useEffect } from 'react';
 import { Play, Eye, Clock, Filter, ChevronDown } from 'lucide-react';
 import { MOCK_VIDEOS } from '../../data/mockVideos';
 import { CATEGORIES } from '../../data/categories';
@@ -39,6 +39,11 @@ export const VideoNewsPage: React.FC = () => {
   const [playing, setPlaying] = useState<VideoItem | null>(null);
   const [sortBy, setSortBy] = useState<'latest' | 'popular'>('latest');
   const [showSort, setShowSort] = useState(false);
+
+  useEffect(() => {
+    document.body.style.overflow = playing ? 'hidden' : '';
+    return () => { document.body.style.overflow = ''; };
+  }, [playing]);
 
   const videoCategories = ['all', 'తెలంగాణ', 'ఆంధ్రప్రదేశ్', 'రాజకీయాలు', 'సినిమా', 'క్రీడలు'];
 

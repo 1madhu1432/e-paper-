@@ -18,6 +18,11 @@ export const AdminEPaperPage: React.FC = () => {
   const [editions, setEditions] = useState<EPaper[]>(() => MockEPaperService.getAll());
   const [showUploadModal, setShowUploadModal] = useState(false);
 
+  useEffect(() => {
+    document.body.style.overflow = showUploadModal ? 'hidden' : '';
+    return () => { document.body.style.overflow = ''; };
+  }, [showUploadModal]);
+
   // Upload Form state
   const [editionName, setEditionName] = useState('');
   const [editionNameTe, setEditionNameTe] = useState('');

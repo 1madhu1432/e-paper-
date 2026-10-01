@@ -1,4 +1,4 @@
-import React, { useState } from 'react';
+import React, { useState, useEffect } from 'react';
 import { NavLink, Link } from 'react-router-dom';
 import { Home, Zap, Video, FileText, MoreHorizontal, Bookmark, Settings, AlertCircle, Shield, X } from 'lucide-react';
 import { useSavedArticles } from '../../context/SavedArticlesContext';
@@ -8,6 +8,15 @@ export const MobileBottomNav: React.FC = () => {
   const [showMoreSheet, setShowMoreSheet] = useState(false);
   const { savedIds } = useSavedArticles();
   const { isSuperAdmin, isEditor, isReporter } = useAuth();
+
+  useEffect(() => {
+    if (showMoreSheet) {
+      document.body.style.overflow = 'hidden';
+    } else {
+      document.body.style.overflow = '';
+    }
+    return () => { document.body.style.overflow = ''; };
+  }, [showMoreSheet]);
 
   return (
     <>

@@ -27,6 +27,11 @@ export const AdminAdsPage: React.FC = () => {
   const [placement, setPlacement] = useState<AdPlacement>('home-top');
   const [desktopBanner, setDesktopBanner] = useState('https://images.unsplash.com/photo-1557804506-669a67965ba0?auto=format&fit=crop&w=800&q=80');
 
+  useEffect(() => {
+    document.body.style.overflow = showAddModal ? 'hidden' : '';
+    return () => { document.body.style.overflow = ''; };
+  }, [showAddModal]);
+
   const refreshAds = () => setAdsList(MockAdService.getAll());
 
   useEffect(() => {
