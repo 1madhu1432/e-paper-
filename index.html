@@ -2,16 +2,28 @@
 <html lang="te">
   <head>
     <meta charset="UTF-8" />
-    <link rel="icon" type="image/svg+xml" href="data:image/svg+xml,<svg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 100 100'><defs><linearGradient id='g' x1='0%25' y1='0%25' x2='100%25' y2='100%25'><stop offset='0%25' stop-color='%23dc2626'/><stop offset='100%25' stop-color='%23991b1b'/></linearGradient></defs><rect width='100' height='100' rx='24' fill='url(%23g)'/><path d='M28 32h44M28 46h44M28 60h28' stroke='white' stroke-width='7' stroke-linecap='round'/><circle cx='68' cy='60' r='5' fill='%23fbbf24'/></svg>" />
+    <link rel="icon" type="image/svg+xml" href="/favicon.svg" />
+    <link rel="apple-touch-icon" href="/favicon.svg" />
+    <link rel="manifest" href="/manifest.json" />
     <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no" />
     <title>జనతా వాణి | Janatha Vaani - విశ్వసనీయ తెలుగు వార్తా వేదిక</title>
+    <meta name="application-name" content="జనతా వాణి" />
+    <meta name="apple-mobile-web-app-title" content="జనతా వాణి" />
     <meta name="description" content="తాజా వార్తలు, ఆంధ్రప్రదేశ్, తెలంగాణ, రాజకీయం, జిల్లాలు, ఉద్యోగాలు, విద్య, వ్యాపారం, సినిమా మరియు ఈ-పేపర్ - జనతా వాణి డిజిటల్ న్యూస్ నెట్వర్క్." />
     <meta name="theme-color" content="#dc2626" />
+    <!-- Automatically unregister any legacy service workers on localhost -->
+    <script>
+      if ('serviceWorker' in navigator) {
+        navigator.serviceWorker.getRegistrations().then(function(regs) {
+          for (var r of regs) { r.unregister(); }
+        });
+      }
+    </script>
     <!-- Performance Preconnects & DNS Prefetch -->
     <link rel="preconnect" href="https://fonts.googleapis.com">
     <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
     <link rel="dns-prefetch" href="https://images.unsplash.com">
-    <!-- Streamlined Google Fonts (only essential weights with display=swap) -->
+    <!-- Streamlined Google Fonts -->
     <link href="https://fonts.googleapis.com/css2?family=Noto+Sans+Telugu:wght@400;600;700;800&family=Plus+Jakarta+Sans:wght@400;600;700&display=swap" rel="stylesheet">
   </head>
   <body class="bg-[#f8f9fa] text-slate-900 antialiased font-telugu selection:bg-red-500 selection:text-white">

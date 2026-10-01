@@ -1,0 +1,16 @@
+{
+  "short_name": "జనతా వాణి",
+  "name": "జనతా వాణి | Janatha Vaani - విశ్వసనీయ తెలుగు వార్తా వేదిక",
+  "description": "తాజా వార్తలు, ఆంధ్రప్రదేశ్, తెలంగాణ, రాజకీయాలు, ఉద్యోగాలు, విద్య, మరియు ఈ-పేపర్.",
+  "icons": [
+    {
+      "src": "/favicon.svg",
+      "type": "image/svg+xml",
+      "sizes": "48x48 72x72 96x96 128x128 192x192 256x256 512x512"
+    }
+  ],
+  "start_url": "/",
+  "background_color": "#ffffff",
+  "theme_color": "#dc2626",
+  "display": "standalone"
+}
