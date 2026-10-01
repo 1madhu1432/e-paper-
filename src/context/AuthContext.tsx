@@ -7,6 +7,7 @@ interface AuthContextType {
   currentRole: Role;
   setRole: (role: Role) => void;
   loginAs: (email: string) => void;
+  loginReader: (name: string, emailOrPhone: string, district?: string) => void;
   logout: () => void;
   isSuperAdmin: boolean;
   isEditor: boolean;
@@ -58,6 +59,33 @@ export const AuthProvider: React.FC<{ children: React.ReactNode }> = ({ children
       });
     }
   };
+  const loginReader = (name: string, emailOrPhone: string, district = 'Hyderabad') => {
+    const readerUser: User = {
+      id: `reader-${Date.now()}`,
+      name: name.trim() || 'పాఠకుడు (Reader)',
+      email: emailOrPhone.includes('@') ? emailOrPhone : `${emailOrPhone}@janathavaani.reader`,
+      phone: !emailOrPhone.includes('@') ? emailOrPhone : '+91 98480 12345',
+      role: 'Reader',
+      avatar: 'https://images.unsplash.com/photo-1535713875002-d1d0cf377fde?auto=format&fit=crop&w=200&q=80',
+      status: 'active',
+      lastLogin: 'ఇప్పుడే',
+      district,
+      permissions: {
+        canView: true,
+        canCreate: false,
+        canEdit: false,
+        canDelete: false,
+        canApprove: false,
+        canPublish: false,
+        canManageAds: false,
+        canManageEPaper: false,
+        canManageUsers: false,
+        canViewAnalytics: false,
+        canChangeSettings: false,
+      },
+    };
+    setCurrentUser(readerUser);
+  };
 
   const logout = () => {
     setCurrentUser({
@@ -97,6 +125,7 @@ export const AuthProvider: React.FC<{ children: React.ReactNode }> = ({ children
         currentRole: role,
         setRole,
         loginAs,
+        loginReader,
         logout,
         isSuperAdmin,
         isEditor,

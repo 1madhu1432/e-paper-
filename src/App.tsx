@@ -36,6 +36,7 @@ import { PreferencesPage } from './pages/public/PreferencesPage';
 import { TermsPage } from './pages/public/TermsPage';
 import { NotFoundPage } from './pages/public/NotFoundPage';
 import { PrivacyPage } from './pages/public/PrivacyPage';
+import { PublicLoginPage } from './pages/public/PublicLoginPage';
 
 // Admin Pages
 import { AdminDashboard } from './pages/admin/AdminDashboard';
@@ -117,6 +118,8 @@ function App() {
                     {/* Privacy & Terms */}
                     <Route path="/privacy" element={<PrivacyPage />} />
                     <Route path="/terms" element={<TermsPage />} />
+                    <Route path="/login" element={<PublicLoginPage />} />
+                    <Route path="/register" element={<PublicLoginPage />} />
                     <Route path="/404" element={<NotFoundPage />} />
                     <Route path="*" element={<NotFoundPage />} />
                   </Route>

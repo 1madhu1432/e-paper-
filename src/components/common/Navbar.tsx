@@ -294,6 +294,17 @@ export const Navbar: React.FC = () => {
             </Link>
           )}
 
+          {/* Public Login Button (Visible when guest reader) */}
+          {currentUser.id === 'guest-reader' && (
+            <Link
+              to="/login"
+              className="inline-flex items-center gap-1.5 bg-red-600 hover:bg-red-700 text-white px-3 py-1.5 rounded-lg text-xs font-bold transition-all shadow-xs cursor-pointer"
+            >
+              <UserIcon className="w-3.5 h-3.5" />
+              <span>లాగిన్ (Login)</span>
+            </Link>
+          )}
+
           {/* User Profile Dropdown / Trigger */}
           <div className="relative">
             <button
@@ -393,16 +404,26 @@ export const Navbar: React.FC = () => {
                     )}
 
                     <div className="pt-1 border-t border-slate-100 mt-1">
-                      <button
-                        onClick={() => {
-                          setProfileMenuOpen(false);
-                          logout();
-                          navigate('/');
-                        }}
-                        className="w-full flex items-center gap-2.5 px-3 py-2 rounded-xl hover:bg-rose-50 text-rose-600 font-bold cursor-pointer text-left"
-                      >
-                        <X className="w-4 h-4" /> సైన్ అవుట్ (Sign Out)
-                      </button>
+                      {currentUser.id === 'guest-reader' ? (
+                        <Link
+                          to="/login"
+                          onClick={() => setProfileMenuOpen(false)}
+                          className="w-full flex items-center gap-2.5 px-3 py-2 rounded-xl bg-red-600 hover:bg-red-700 text-white font-bold cursor-pointer text-left shadow-xs"
+                        >
+                          <UserIcon className="w-4 h-4" /> లాగిన్ / సైన్ అప్ (Sign In)
+                        </Link>
+                      ) : (
+                        <button
+                          onClick={() => {
+                            setProfileMenuOpen(false);
+                            logout();
+                            navigate('/');
+                          }}
+                          className="w-full flex items-center gap-2.5 px-3 py-2 rounded-xl hover:bg-rose-50 text-rose-600 font-bold cursor-pointer text-left"
+                        >
+                          <X className="w-4 h-4" /> సైన్ అవుట్ (Sign Out)
+                        </button>
+                      )}
                     </div>
                   </div>
                 </div>
@@ -515,14 +536,32 @@ export const Navbar: React.FC = () => {
               </div>
 
               {/* Demo user badge in mobile menu */}
-              <div className="p-3 bg-slate-50 rounded-xl border border-slate-200 mb-4 flex items-center justify-between">
+              <div className="p-3 bg-slate-50 rounded-xl border border-slate-200 mb-3 flex items-center justify-between">
                 <div>
-                  <p className="text-[11px] text-slate-500 font-medium">ప్రస్తుత డెమో ఖాతా</p>
+                  <p className="text-[11px] text-slate-500 font-medium">ప్రస్తుత ఖాతా</p>
                   <p className="text-xs font-bold text-slate-800">{currentUser.name}</p>
                   <span className="text-[10px] bg-red-100 text-red-700 px-1.5 py-0.2 rounded font-bold">{currentUser.role}</span>
                 </div>
                 <RoleSwitcher />
               </div>
+
+              {currentUser.id === 'guest-reader' ? (
+                <Link
+                  to="/login"
+                  onClick={() => setMobileMenuOpen(false)}
+                  className="w-full flex items-center justify-center gap-2 bg-red-600 hover:bg-red-700 text-white py-2.5 rounded-xl font-bold mb-4 shadow-sm text-xs"
+                >
+                  <UserIcon className="w-4 h-4" /> పాఠకుల లాగిన్ (Reader Login / Sign In)
+                </Link>
+              ) : (
+                <Link
+                  to="/profile"
+                  onClick={() => setMobileMenuOpen(false)}
+                  className="w-full flex items-center justify-center gap-2 bg-slate-100 hover:bg-slate-200 text-slate-800 py-2 rounded-xl font-bold mb-4 text-xs"
+                >
+                  <UserIcon className="w-4 h-4 text-slate-600" /> నా ప్రొఫైల్ (My Profile)
+                </Link>
+              )}
 
               {/* Mobile Quick Links */}
               <div className="grid grid-cols-2 gap-2 mb-4">

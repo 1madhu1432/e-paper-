@@ -120,6 +120,22 @@ export const ProfilePage: React.FC = () => {
           </div>
         )}
 
+        {/* Guest Reader Login Prompt */}
+        {currentUser.id === 'guest-reader' && (
+          <div className="bg-gradient-to-r from-red-600 to-amber-600 text-white rounded-2xl p-4 shadow-md flex flex-col sm:flex-row items-start sm:items-center justify-between gap-3 animate-in fade-in">
+            <div>
+              <p className="text-sm font-bold font-telugu">మీరు అతిథిగా ఉన్నారు (Guest Reader)</p>
+              <p className="text-xs text-white/90 font-telugu mt-0.5">పూర్తి సదుపాయాలు పొందడానికి మీ మొబైల్ లేదా ఈమెయిల్‌తో లాగిన్ అవ్వండి.</p>
+            </div>
+            <Link
+              to="/login"
+              className="px-4 py-2 bg-white hover:bg-slate-100 text-red-600 font-bold text-xs rounded-xl transition-colors shadow-sm shrink-0"
+            >
+              లాగిన్ / సైన్ అప్ →
+            </Link>
+          </div>
+        )}
+
         {/* Edit Profile Form */}
         {editMode ? (
           <form onSubmit={handleSaveProfile} className="bg-white rounded-2xl p-5 border border-slate-200 shadow-sm space-y-4">
