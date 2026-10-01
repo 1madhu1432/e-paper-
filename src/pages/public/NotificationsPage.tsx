@@ -18,7 +18,7 @@ const CATEGORY_ICONS: Record<string, string> = {
 };
 
 export const NotificationsPage: React.FC = () => {
-  const { notifications, markAllAsRead, unreadCount } = useNotifications();
+  const { notifications, markAllAsRead, clearAllNotifications, unreadCount } = useNotifications();
   const [filter, setFilter] = useState<'all' | 'unread'>('all');
   const [localRead, setLocalRead] = useState<Set<string>>(new Set());
 
@@ -51,9 +51,17 @@ export const NotificationsPage: React.FC = () => {
               {unreadCount > 0 && (
                 <button
                   onClick={() => { markAllAsRead(); setLocalRead(new Set(notifications.map(n => n.id))); }}
-                  className="flex items-center gap-1.5 px-3 py-2 bg-white/10 hover:bg-white/20 text-white text-xs font-medium rounded-xl border border-white/20 transition-colors cursor-pointer"
+                  className="flex items-center gap-1.5 px-3 py-2 bg-white/10 hover:bg-white/20 text-white text-xs font-medium rounded-xl border border-white/20 transition-colors cursor-pointer font-telugu"
                 >
                   <Check className="w-4 h-4" /> అన్నీ చదివినట్టు మార్చు
+                </button>
+              )}
+              {notifications.length > 0 && (
+                <button
+                  onClick={() => { clearAllNotifications(); setLocalRead(new Set()); }}
+                  className="flex items-center gap-1.5 px-3 py-2 bg-rose-600/80 hover:bg-rose-600 text-white text-xs font-medium rounded-xl border border-rose-500/40 transition-colors cursor-pointer font-telugu"
+                >
+                  <Trash2 className="w-4 h-4" /> క్లియర్ చేయి (Clear All)
                 </button>
               )}
             </div>

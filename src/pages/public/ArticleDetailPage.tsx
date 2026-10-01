@@ -91,6 +91,8 @@ export const ArticleDetailPage: React.FC = () => {
   const prevArticle = currentIndex > 0 ? allPublished[currentIndex - 1] : undefined;
   const nextArticle = currentIndex < allPublished.length - 1 ? allPublished[currentIndex + 1] : undefined;
 
+  const [showCopyToast, setShowCopyToast] = useState(false);
+
   const handlePrint = () => {
     window.print();
   };
@@ -100,6 +102,23 @@ export const ArticleDetailPage: React.FC = () => {
     window.open(`https://api.whatsapp.com/send?text=${text}`, '_blank');
   };
 
+  const handleFacebookShare = () => {
+    const url = encodeURIComponent(window.location.href);
+    window.open(`https://www.facebook.com/sharer/sharer.php?u=${url}`, '_blank');
+  };
+
+  const handleXShare = () => {
+    const text = encodeURIComponent(article.titleTe);
+    const url = encodeURIComponent(window.location.href);
+    window.open(`https://twitter.com/intent/tweet?text=${text}&url=${url}`, '_blank');
+  };
+
+  const handleCopyLink = () => {
+    navigator.clipboard.writeText(window.location.href);
+    setShowCopyToast(true);
+    setTimeout(() => setShowCopyToast(false), 2500);
+  };
+
   const handleShare = () => {
     if (navigator.share) {
       navigator.share({
@@ -107,8 +126,7 @@ export const ArticleDetailPage: React.FC = () => {
         url: window.location.href,
       }).catch(() => {});
     } else {
-      navigator.clipboard.writeText(window.location.href);
-      alert('కథనం లింక్ కాపీ చేయబడింది!');
+      handleCopyLink();
     }
   };
 
@@ -334,13 +352,36 @@ export const ArticleDetailPage: React.FC = () => {
               </button>
             </div>
 
-            <div className="flex items-center gap-2">
+            <div className="flex items-center gap-2 flex-wrap">
               <button
                 onClick={handleWhatsAppShare}
-                className="flex items-center gap-1.5 px-3.5 py-1.5 bg-emerald-600 hover:bg-emerald-700 text-white text-xs font-bold rounded-xl shadow-xs"
+                className="flex items-center gap-1.5 px-3 py-1.5 bg-emerald-600 hover:bg-emerald-700 text-white text-xs font-bold rounded-xl shadow-xs cursor-pointer"
+                title="WhatsApp లో షేర్ చేయండి"
               >
-                <MessageCircle className="w-4 h-4 fill-white" />
-                <span>వాట్సాప్‌లో షేర్ చేయండి</span>
+                <MessageCircle className="w-3.5 h-3.5 fill-white" />
+                <span>WhatsApp</span>
+              </button>
+              <button
+                onClick={handleFacebookShare}
+                className="flex items-center gap-1.5 px-3 py-1.5 bg-blue-600 hover:bg-blue-700 text-white text-xs font-bold rounded-xl shadow-xs cursor-pointer"
+                title="Facebook లో షేర్ చేయండి"
+              >
+                <span>Facebook</span>
+              </button>
+              <button
+                onClick={handleXShare}
+                className="flex items-center gap-1.5 px-3 py-1.5 bg-slate-900 hover:bg-black text-white text-xs font-bold rounded-xl shadow-xs cursor-pointer"
+                title="X (Twitter) లో షేర్ చేయండి"
+              >
+                <span>X (Twitter)</span>
+              </button>
+              <button
+                onClick={handleCopyLink}
+                className="flex items-center gap-1.5 px-3 py-1.5 bg-slate-200 hover:bg-slate-300 text-slate-800 text-xs font-bold rounded-xl shadow-xs cursor-pointer"
+                title="కథనం లింక్ కాపీ చేయండి"
+              >
+                <ExternalLink className="w-3.5 h-3.5" />
+                <span>Copy Link</span>
               </button>
             </div>
           </div>
@@ -459,6 +500,12 @@ export const ArticleDetailPage: React.FC = () => {
           </div>
         </aside>
       </div>
+
+      {showCopyToast && (
+        <div className="fixed bottom-6 right-6 z-50 bg-slate-900 text-white px-5 py-3 rounded-2xl shadow-2xl font-bold text-xs flex items-center gap-2 animate-in fade-in border border-slate-700">
+          <span>✓ కథనం లింక్ విజయవంతంగా కాపీ చేయబడింది! (Link copied!)</span>
+        </div>
+      )}
     </article>
   );
 };

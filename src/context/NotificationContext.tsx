@@ -6,6 +6,8 @@ interface NotificationContextType {
   notifications: PushNotification[];
   unreadCount: number;
   markAllAsRead: () => void;
+  markNotificationAsRead: (id: string) => void;
+  clearAllNotifications: () => void;
   activeToast: PushNotification | null;
   dismissToast: () => void;
   refreshNotifications: () => void;
@@ -41,6 +43,15 @@ export const NotificationProvider: React.FC<{ children: React.ReactNode }> = ({ 
     setUnreadCount(0);
   };
 
+  const markNotificationAsRead = (id: string) => {
+    setUnreadCount(prev => Math.max(0, prev - 1));
+  };
+
+  const clearAllNotifications = () => {
+    setNotifications([]);
+    setUnreadCount(0);
+  };
+
   const dismissToast = () => {
     setActiveToast(null);
   };
@@ -51,6 +62,8 @@ export const NotificationProvider: React.FC<{ children: React.ReactNode }> = ({ 
         notifications,
         unreadCount,
         markAllAsRead,
+        markNotificationAsRead,
+        clearAllNotifications,
         activeToast,
         dismissToast,
         refreshNotifications,

@@ -14,7 +14,7 @@ import {
   CheckCircle,
   Wand2,
 } from 'lucide-react';
-import { MOCK_ARTICLES } from '../../data/mockArticles';
+import { MockNewsService } from '../../services/mockNewsService';
 import { CATEGORIES } from '../../data/categories';
 import { REPORTERS } from '../../data/reporters';
 
@@ -23,16 +23,16 @@ export const AdminArticleEditorPage: React.FC = () => {
   const navigate = useNavigate();
   const isEditing = Boolean(id);
 
-  const existingArticle = MOCK_ARTICLES.find((a) => a.id === id);
+  const existingArticle = id ? MockNewsService.getById(id) : undefined;
 
   const [titleTe, setTitleTe] = useState(existingArticle?.titleTe || '');
   const [titleEn, setTitleEn] = useState(existingArticle?.title || '');
-  const [category, setCategory] = useState(existingArticle?.category || CATEGORIES[0].nameTe);
+  const [category, setCategory] = useState(existingArticle?.category || CATEGORIES[0].slug);
   const [excerptTe, setExcerptTe] = useState(existingArticle?.summaryTe || '');
   const [content, setContent] = useState(
-    existingArticle?.summaryTe
-      ? `${existingArticle.summaryTe}\n\nరాష్ట్ర వ్యాప్తంగా ఈ ఘటన సంచలనం సృష్టించింది. సేకరించిన ప్రాథమిక సమాచారం ప్రకారం అధికారులు తక్షణ నివేదిక సమర్పించాల్సిందిగా ఉత్తర్వులు జారీ చేశారు.`
-      : ''
+    existingArticle?.contentTe ||
+      existingArticle?.summaryTe ||
+      ''
   );
   const [featuredImage, setFeaturedImage] = useState(
     existingArticle?.imageUrl ||
@@ -40,7 +40,7 @@ export const AdminArticleEditorPage: React.FC = () => {
   );
   const [authorName, setAuthorName] = useState(existingArticle?.authorName || REPORTERS[0].nameTe);
   const [isBreaking, setIsBreaking] = useState(existingArticle?.isBreaking || false);
-  const [isFeatured, setIsFeatured] = useState(false);
+  const [isFeatured, setIsFeatured] = useState(existingArticle?.isFeatured || false);
   const [tags, setTags] = useState(existingArticle?.tags?.join(', ') || 'తెలంగాణ, ముఖ్య వార్తలు, లైవ్ అప్‌డేట్స్');
 
   const [aiGenerating, setAiGenerating] = useState(false);
@@ -65,12 +65,34 @@ export const AdminArticleEditorPage: React.FC = () => {
     }, 800);
   };
 
-  const handleSave = (status: 'draft' | 'published') => {
+  const handleSave = (status: 'draft' | 'pending_review' | 'published') => {
+    const articlePayload = {
+      title: titleEn || titleTe,
+      titleTe: titleTe || titleEn,
+      summary: excerptTe,
+      summaryTe: excerptTe,
+      content: content,
+      contentTe: content,
+      category: category,
+      authorName: authorName,
+      imageUrl: featuredImage,
+      isBreaking: isBreaking,
+      isFeatured: isFeatured,
+      status: status,
+      tags: tags.split(',').map(t => t.trim()).filter(Boolean),
+    };
+
+    if (isEditing && id) {
+      MockNewsService.update(id, articlePayload);
+    } else {
+      MockNewsService.create(articlePayload);
+    }
+
     setSavedSuccess(true);
     setTimeout(() => {
       setSavedSuccess(false);
       navigate('/admin/articles');
-    }, 1000);
+    }, 800);
   };
 
   return (
@@ -94,13 +116,20 @@ export const AdminArticleEditorPage: React.FC = () => {
           </div>
         </div>
 
-        <div className="flex items-center gap-2">
+        <div className="flex items-center gap-2 flex-wrap">
           <button
             onClick={() => handleSave('draft')}
             className="px-4 py-2.5 bg-slate-100 hover:bg-slate-200 text-slate-700 rounded-xl text-xs font-bold transition-all flex items-center gap-2 cursor-pointer"
           >
             <Save className="w-4 h-4" />
             <span>డ్రాఫ్ట్‌గా సేవ్ చేయి</span>
+          </button>
+          <button
+            onClick={() => handleSave('pending_review')}
+            className="px-4 py-2.5 bg-amber-500 hover:bg-amber-600 text-white rounded-xl text-xs font-bold transition-all shadow-md flex items-center gap-2 cursor-pointer"
+          >
+            <UserCheck className="w-4 h-4" />
+            <span>సమీక్షకు పంపు (Submit for Review)</span>
           </button>
           <button
             onClick={() => handleSave('published')}

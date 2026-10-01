@@ -1,6 +1,6 @@
 export type Role = 'Super Admin' | 'Editor-in-Chief' | 'Editor' | 'Reporter' | 'Social Media Manager' | 'Reader';
 
-export type ArticleStatus = 'draft' | 'pending' | 'published' | 'rejected' | 'archived';
+export type ArticleStatus = 'draft' | 'pending' | 'pending_review' | 'published' | 'rejected' | 'archived';
 
 export interface Category {
   id: string;

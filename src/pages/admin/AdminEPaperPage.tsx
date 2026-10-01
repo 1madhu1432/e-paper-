@@ -1,4 +1,4 @@
-import React, { useState } from 'react';
+import React, { useState, useEffect } from 'react';
 import {
   FileText,
   Plus,
@@ -11,11 +11,11 @@ import {
   CheckCircle,
   X,
 } from 'lucide-react';
-import { MOCK_EPAPER_EDITIONS } from '../../data/mockEPaper';
+import { MockEPaperService } from '../../services/mockEPaperService';
 import { EPaper } from '../../types';
 
 export const AdminEPaperPage: React.FC = () => {
-  const [editions, setEditions] = useState<EPaper[]>(MOCK_EPAPER_EDITIONS as any);
+  const [editions, setEditions] = useState<EPaper[]>(() => MockEPaperService.getAll());
   const [showUploadModal, setShowUploadModal] = useState(false);
 
   // Upload Form state
@@ -24,9 +24,17 @@ export const AdminEPaperPage: React.FC = () => {
   const [date, setDate] = useState(new Date().toISOString().split('T')[0]);
   const [pagesCount, setPagesCount] = useState(16);
 
+  const refreshEditions = () => setEditions(MockEPaperService.getAll());
+
+  useEffect(() => {
+    window.addEventListener('epaper-updated', refreshEditions);
+    return () => window.removeEventListener('epaper-updated', refreshEditions);
+  }, []);
+
   const handleDelete = (id: string) => {
     if (window.confirm('ఈ ఈ-పేపర్ ఎడిషన్‌ను తొలిగించాలనుకుంటున్నారా?')) {
-      setEditions((prev) => prev.filter((e) => e.id !== id));
+      MockEPaperService.delete(id);
+      refreshEditions();
     }
   };
 
@@ -34,29 +42,19 @@ export const AdminEPaperPage: React.FC = () => {
     e.preventDefault();
     if (!editionNameTe) return;
 
-    const newEd: EPaper = {
-      id: `epaper-${Date.now()}`,
-      date,
-      district: 'Hyderabad',
+    MockEPaperService.create({
       editionName: editionName || 'Main Edition',
       editionNameTe,
-      pdfUrl: '#',
-      coverImage: 'https://images.unsplash.com/photo-1504711434969-e33886168f5c?auto=format&fit=crop&w=600&q=80',
+      date,
+      district: 'Hyderabad',
       totalPages: Number(pagesCount),
       status: 'published',
-      views: 120,
-      downloads: 45,
-      createdAt: new Date().toISOString(),
-      pages: Array.from({ length: Number(pagesCount) }).map((_, i) => ({
-        pageNumber: i + 1,
-        title: `Page ${i + 1}`,
-        imageUrl: 'https://images.unsplash.com/photo-1504711434969-e33886168f5c?auto=format&fit=crop&w=800&q=80',
-      })),
-    };
+    });
 
-    setEditions([newEd, ...editions]);
     setEditionNameTe('');
+    setEditionName('');
     setShowUploadModal(false);
+    refreshEditions();
   };
 
   return (

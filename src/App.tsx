@@ -34,6 +34,7 @@ import { NotificationsPage } from './pages/public/NotificationsPage';
 import { ProfilePage } from './pages/public/ProfilePage';
 import { PreferencesPage } from './pages/public/PreferencesPage';
 import { TermsPage } from './pages/public/TermsPage';
+import { NotFoundPage } from './pages/public/NotFoundPage';
 
 // Admin Pages
 import { AdminDashboard } from './pages/admin/AdminDashboard';
@@ -113,6 +114,7 @@ function App() {
                     {/* Privacy & Terms */}
                     <Route path="/privacy" element={<AboutPage />} />
                     <Route path="/terms" element={<TermsPage />} />
+                    <Route path="/404" element={<NotFoundPage />} />
                   </Route>
 
                   {/* Admin Login (standalone page, no layout) */}
@@ -154,7 +156,9 @@ function App() {
                   </Route>
 
                   {/* 404 Fallback */}
-                  <Route path="*" element={<Navigate to="/" replace />} />
+                  <Route path="*" element={<PublicLayout />}>
+                    <Route path="*" element={<NotFoundPage />} />
+                  </Route>
                 </Routes>
               </Suspense>
             </UserPreferencesProvider>

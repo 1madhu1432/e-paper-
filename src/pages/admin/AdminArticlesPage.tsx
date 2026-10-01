@@ -1,4 +1,4 @@
-import React, { useState, useMemo } from 'react';
+import React, { useState, useEffect, useMemo } from 'react';
 import { Link } from 'react-router-dom';
 import {
   FileText,
@@ -16,35 +16,42 @@ import {
   ChevronRight,
   AlertCircle,
 } from 'lucide-react';
-import { MOCK_ARTICLES } from '../../data/mockArticles';
+import { MockNewsService } from '../../services/mockNewsService';
 import { CATEGORIES } from '../../data/categories';
-import { Article } from '../../types';
+import { Article, ArticleStatus } from '../../types';
 
 export const AdminArticlesPage: React.FC = () => {
-  const [articles, setArticles] = useState<Article[]>(MOCK_ARTICLES);
+  const [articles, setArticles] = useState<Article[]>(() => MockNewsService.getAll());
   const [searchTerm, setSearchTerm] = useState('');
   const [selectedCategory, setSelectedCategory] = useState<string>('All');
   const [selectedStatus, setSelectedStatus] = useState<string>('All');
   const [currentPage, setCurrentPage] = useState(1);
   const itemsPerPage = 10;
 
+  useEffect(() => {
+    const refresh = () => setArticles(MockNewsService.getAll());
+    window.addEventListener('articles-updated', refresh);
+    return () => window.removeEventListener('articles-updated', refresh);
+  }, []);
+
   // Filter logic
   const filteredArticles = useMemo(() => {
     return articles.filter((art) => {
       const matchQuery =
+        !searchTerm ||
         art.title.toLowerCase().includes(searchTerm.toLowerCase()) ||
         art.titleTe.includes(searchTerm) ||
         art.authorName.toLowerCase().includes(searchTerm.toLowerCase());
 
       const matchCat =
-        selectedCategory === 'All' || art.category === selectedCategory;
+        selectedCategory === 'All' || art.category === selectedCategory || art.subcategory === selectedCategory;
 
       const matchStatus =
         selectedStatus === 'All'
           ? true
           : selectedStatus === 'breaking'
           ? art.isBreaking
-          : true;
+          : art.status === selectedStatus;
 
       return matchQuery && matchCat && matchStatus;
     });
@@ -59,14 +66,19 @@ export const AdminArticlesPage: React.FC = () => {
 
   const handleDelete = (id: string) => {
     if (window.confirm('ఈ వార్తా కథనాన్ని నిజంగా తొలగించాలనుకుంటున్నారా?')) {
-      setArticles((prev) => prev.filter((a) => a.id !== id));
+      MockNewsService.delete(id);
+      setArticles(MockNewsService.getAll());
     }
   };
 
   const toggleBreaking = (id: string) => {
-    setArticles((prev) =>
-      prev.map((a) => (a.id === id ? { ...a, isBreaking: !a.isBreaking } : a))
-    );
+    MockNewsService.toggleBreaking(id);
+    setArticles(MockNewsService.getAll());
+  };
+
+  const handleStatusChange = (id: string, newStatus: ArticleStatus) => {
+    MockNewsService.update(id, { status: newStatus });
+    setArticles(MockNewsService.getAll());
   };
 
   return (
@@ -140,7 +152,10 @@ export const AdminArticlesPage: React.FC = () => {
             className="w-full px-3 py-2 bg-slate-50 border border-slate-200 rounded-xl text-xs text-slate-800 focus:outline-none focus:border-red-500 cursor-pointer"
           >
             <option value="All">అన్ని స్థితులు (All Statuses)</option>
-            <option value="breaking font-bold">బ్రేకింగ్ న్యూస్ (Breaking News Only)</option>
+            <option value="published">ప్రచురితం (Published Only)</option>
+            <option value="pending_review">పరిశీలనలో (Pending Review)</option>
+            <option value="draft">డ్రాఫ్ట్ (Drafts Only)</option>
+            <option value="breaking">బ్రేకింగ్ న్యూస్ (Breaking News Only)</option>
           </select>
         </div>
       </div>
@@ -153,8 +168,8 @@ export const AdminArticlesPage: React.FC = () => {
               <tr>
                 <th className="py-3.5 px-4">వార్త శీర్షిక</th>
                 <th className="py-3.5 px-3">వర్గం</th>
+                <th className="py-3.5 px-3">స్థితి (Status)</th>
                 <th className="py-3.5 px-3">రచయిత</th>
-                <th className="py-3.5 px-3">తేదీ</th>
                 <th className="py-3.5 px-3">బ్రేకింగ్?</th>
                 <th className="py-3.5 px-4 text-right">చర్యలు</th>
               </tr>
@@ -183,10 +198,24 @@ export const AdminArticlesPage: React.FC = () => {
                         {art.category}
                       </span>
                     </td>
-                    <td className="py-3.5 px-3 font-semibold text-slate-800 whitespace-nowrap">
-                      {art.authorName}
+                    <td className="py-3.5 px-3 whitespace-nowrap">
+                      <select
+                        value={art.status}
+                        onChange={(e) => handleStatusChange(art.id, e.target.value as ArticleStatus)}
+                        className={`text-[10px] font-bold px-2 py-1 rounded-full border cursor-pointer ${
+                          art.status === 'published'
+                            ? 'bg-emerald-50 text-emerald-700 border-emerald-200'
+                            : art.status === 'pending_review'
+                            ? 'bg-amber-50 text-amber-700 border-amber-200'
+                            : 'bg-slate-100 text-slate-600 border-slate-200'
+                        }`}
+                      >
+                        <option value="published">✓ Published</option>
+                        <option value="pending_review">⏳ Pending Review</option>
+                        <option value="draft">📝 Draft</option>
+                        <option value="archived">📁 Archived</option>
+                      </select>
                     </td>
-                    <td className="py-3.5 px-3 text-slate-500 whitespace-nowrap">{art.publishedAt}</td>
                     <td className="py-3.5 px-3 whitespace-nowrap">
                       <button
                         onClick={() => toggleBreaking(art.id)}

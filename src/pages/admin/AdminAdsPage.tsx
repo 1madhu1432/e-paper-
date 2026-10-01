@@ -1,4 +1,4 @@
-import React, { useState } from 'react';
+import React, { useState, useEffect } from 'react';
 import {
   Megaphone,
   Plus,
@@ -13,12 +13,13 @@ import {
   X,
   CheckCircle,
 } from 'lucide-react';
-import { MOCK_ADVERTISEMENTS } from '../../data/mockAds';
+import { MockAdService } from '../../services/mockAdService';
 import { Advertisement, AdPlacement } from '../../types';
 
 export const AdminAdsPage: React.FC = () => {
-  const [adsList, setAdsList] = useState<Advertisement[]>(MOCK_ADVERTISEMENTS);
+  const [adsList, setAdsList] = useState<Advertisement[]>(() => MockAdService.getAll());
   const [showAddModal, setShowAddModal] = useState(false);
+  const [editingAd, setEditingAd] = useState<Advertisement | null>(null);
 
   // New Ad Form State
   const [adTitle, setAdTitle] = useState('');
@@ -26,38 +27,58 @@ export const AdminAdsPage: React.FC = () => {
   const [placement, setPlacement] = useState<AdPlacement>('home-top');
   const [desktopBanner, setDesktopBanner] = useState('https://images.unsplash.com/photo-1557804506-669a67965ba0?auto=format&fit=crop&w=800&q=80');
 
-  const toggleAdStatus = (id: string) => {
-    setAdsList((prev) =>
-      prev.map((ad) => (ad.id === id ? { ...ad, status: ad.status === 'active' ? 'paused' : 'active' } : ad))
-    );
+  const refreshAds = () => setAdsList(MockAdService.getAll());
+
+  useEffect(() => {
+    window.addEventListener('ads-updated', refreshAds);
+    return () => window.removeEventListener('ads-updated', refreshAds);
+  }, []);
+
+  const toggleAdStatus = (id: string, currentStatus: string) => {
+    const nextStatus = currentStatus === 'active' ? 'paused' : 'active';
+    MockAdService.update(id, { status: nextStatus as any });
+    refreshAds();
   };
 
-  const handleCreateAd = (e: React.FormEvent) => {
+  const handleDeleteAd = (id: string) => {
+    if (window.confirm('ఈ ప్రకటన క్యాంపెయిన్‌ను తొలగించాలనుకుంటున్నారా?')) {
+      MockAdService.delete(id);
+      refreshAds();
+    }
+  };
+
+  const handleCreateOrUpdateAd = (e: React.FormEvent) => {
     e.preventDefault();
     if (!adTitle || !sponsorName) return;
 
-    const newAd: Advertisement = {
-      id: `ad-${Date.now()}`,
-      campaignName: adTitle,
-      sponsorName,
-      adTitle,
-      desktopBanner,
-      mobileBanner: desktopBanner,
-      targetUrl: 'https://janathavaani.com/advertise',
-      placement,
-      priority: 'high',
-      status: 'active',
-      startDate: new Date().toISOString().split('T')[0],
-      endDate: '2026-12-31',
-      impressions: 0,
-      clicks: 0,
-      revenue: 50000,
-    };
+    if (editingAd) {
+      MockAdService.update(editingAd.id, {
+        campaignName: adTitle,
+        adTitle,
+        sponsorName,
+        placement,
+        desktopBanner,
+        mobileBanner: desktopBanner,
+      });
+    } else {
+      MockAdService.create({
+        campaignName: adTitle,
+        adTitle,
+        sponsorName,
+        placement,
+        desktopBanner,
+        mobileBanner: desktopBanner,
+        targetUrl: 'https://janathavaani.com/advertise',
+        status: 'active',
+        priority: 'high',
+      });
+    }
 
-    setAdsList([newAd, ...adsList]);
     setAdTitle('');
     setSponsorName('');
+    setEditingAd(null);
     setShowAddModal(false);
+    refreshAds();
   };
 
   return (
@@ -191,16 +212,38 @@ export const AdminAdsPage: React.FC = () => {
                       </span>
                     </td>
                     <td className="py-3.5 px-4 text-right">
-                      <button
-                        onClick={() => toggleAdStatus(ad.id)}
-                        className={`px-3 py-1 rounded-lg text-xs font-bold transition-all cursor-pointer ${
-                          ad.status === 'active'
-                            ? 'bg-amber-100 text-amber-900 hover:bg-amber-200'
-                            : 'bg-emerald-100 text-emerald-900 hover:bg-emerald-200'
-                        }`}
-                      >
-                        {ad.status === 'active' ? 'పాజ్ చేయి' : 'ప్రారంభించు'}
-                      </button>
+                      <div className="flex items-center justify-end gap-2">
+                        <button
+                          onClick={() => toggleAdStatus(ad.id, ad.status)}
+                          className={`px-2.5 py-1 rounded-lg text-xs font-bold transition-all cursor-pointer ${
+                            ad.status === 'active'
+                              ? 'bg-amber-100 text-amber-900 hover:bg-amber-200'
+                              : 'bg-emerald-100 text-emerald-900 hover:bg-emerald-200'
+                          }`}
+                        >
+                          {ad.status === 'active' ? 'పాజ్ చేయి (Pause)' : 'ప్రారంభించు (Activate)'}
+                        </button>
+                        <button
+                          onClick={() => {
+                            setEditingAd(ad);
+                            setAdTitle(ad.adTitle || ad.campaignName);
+                            setSponsorName(ad.sponsorName);
+                            setPlacement(ad.placement);
+                            setDesktopBanner(ad.desktopBanner);
+                            setShowAddModal(true);
+                          }}
+                          className="px-2.5 py-1 bg-slate-100 hover:bg-slate-200 text-slate-800 rounded-lg text-xs font-bold cursor-pointer"
+                        >
+                          సవరించు (Edit)
+                        </button>
+                        <button
+                          onClick={() => handleDeleteAd(ad.id)}
+                          className="p-1 text-slate-400 hover:text-red-600 hover:bg-red-50 rounded-lg transition-colors cursor-pointer"
+                          title="తొలగించండి"
+                        >
+                          <Trash2 className="w-4 h-4" />
+                        </button>
+                      </div>
                     </td>
                   </tr>
                 );
@@ -210,18 +253,26 @@ export const AdminAdsPage: React.FC = () => {
         </div>
       </div>
 
-      {/* Add Ad Modal */}
+      {/* Add / Edit Ad Modal */}
       {showAddModal && (
         <div className="fixed inset-0 z-50 bg-black/60 backdrop-blur-xs flex items-center justify-center p-4">
-          <div className="bg-white rounded-2xl max-w-md w-full p-6 shadow-2xl space-y-4">
+          <div className="bg-white rounded-2xl max-w-md w-full p-6 shadow-2xl space-y-4 animate-in zoom-in-95">
             <div className="flex items-center justify-between border-b pb-3">
-              <h3 className="text-base font-bold font-telugu text-slate-900">కొత్త ప్రకటన బ్యానర్ జోడించండి</h3>
-              <button onClick={() => setShowAddModal(false)} className="p-1 text-slate-400 hover:text-slate-600">
+              <h3 className="text-base font-bold font-telugu text-slate-900">
+                {editingAd ? 'ప్రకటనను సవరించండి (Edit Ad)' : 'కొత్త ప్రకటన బ్యానర్ జోడించండి'}
+              </h3>
+              <button
+                onClick={() => {
+                  setShowAddModal(false);
+                  setEditingAd(null);
+                }}
+                className="p-1 text-slate-400 hover:text-slate-600 cursor-pointer"
+              >
                 <X className="w-5 h-5" />
               </button>
             </div>
 
-            <form onSubmit={handleCreateAd} className="space-y-4">
+            <form onSubmit={handleCreateOrUpdateAd} className="space-y-4">
               <div>
                 <label className="block text-xs font-bold text-slate-700 mb-1">ప్రకటన శీర్షిక (Campaign Name)</label>
                 <input
@@ -230,7 +281,7 @@ export const AdminAdsPage: React.FC = () => {
                   value={adTitle}
                   onChange={(e) => setAdTitle(e.target.value)}
                   placeholder="ఉదా: రియల్ ఎస్టేట్ మెగా ఆఫర్"
-                  className="w-full px-3 py-2 bg-slate-50 border border-slate-200 rounded-xl text-xs focus:outline-none focus:border-red-500"
+                  className="w-full px-3 py-2 bg-slate-50 border border-slate-200 rounded-xl text-xs focus:outline-none focus:border-red-500 font-medium"
                 />
               </div>
 
@@ -242,7 +293,7 @@ export const AdminAdsPage: React.FC = () => {
                   value={sponsorName}
                   onChange={(e) => setSponsorName(e.target.value)}
                   placeholder="ఉదా: హైదరాబాద్ వెంచర్స్ లిమిటెడ్"
-                  className="w-full px-3 py-2 bg-slate-50 border border-slate-200 rounded-xl text-xs focus:outline-none focus:border-red-500"
+                  className="w-full px-3 py-2 bg-slate-50 border border-slate-200 rounded-xl text-xs focus:outline-none focus:border-red-500 font-medium"
                 />
               </div>
 
@@ -251,10 +302,13 @@ export const AdminAdsPage: React.FC = () => {
                 <select
                   value={placement}
                   onChange={(e) => setPlacement(e.target.value as AdPlacement)}
-                  className="w-full px-3 py-2 bg-slate-50 border border-slate-200 rounded-xl text-xs focus:outline-none focus:border-red-500"
+                  className="w-full px-3 py-2 bg-slate-50 border border-slate-200 rounded-xl text-xs focus:outline-none focus:border-red-500 font-medium cursor-pointer"
                 >
                   <option value="home-top">హెడర్ టాప్ బ్యానర్ (home-top)</option>
+                  <option value="home-middle">హోమ్‌పేజీ మిడ్ బ్యానర్ (home-middle)</option>
+                  <option value="article-top">వార్త పైన బ్యానర్ (article-top)</option>
                   <option value="article-middle">వార్త మధ్యలో ఇన్-ఆర్టికల్ (article-middle)</option>
+                  <option value="category-top">వర్గం పైన బ్యానర్ (category-top)</option>
                   <option value="sidebar">సైడ్‌బార్ చతురస్రం (sidebar)</option>
                   <option value="mobile-sticky">మొబైల్ స్టిక్కీ ఫుటర్ (mobile-sticky)</option>
                 </select>
@@ -266,23 +320,26 @@ export const AdminAdsPage: React.FC = () => {
                   type="text"
                   value={desktopBanner}
                   onChange={(e) => setDesktopBanner(e.target.value)}
-                  className="w-full px-3 py-2 bg-slate-50 border border-slate-200 rounded-xl text-xs focus:outline-none focus:border-red-500"
+                  className="w-full px-3 py-2 bg-slate-50 border border-slate-200 rounded-xl text-xs focus:outline-none focus:border-red-500 font-medium"
                 />
               </div>
 
               <div className="pt-3 border-t flex items-center justify-end gap-2">
                 <button
                   type="button"
-                  onClick={() => setShowAddModal(false)}
-                  className="px-4 py-2 bg-slate-100 text-slate-600 rounded-xl text-xs font-semibold"
+                  onClick={() => {
+                    setShowAddModal(false);
+                    setEditingAd(null);
+                  }}
+                  className="px-4 py-2 bg-slate-100 hover:bg-slate-200 text-slate-700 rounded-xl text-xs font-bold cursor-pointer"
                 >
-                  రద్దు చేయి
+                  రద్దు చేయి (Cancel)
                 </button>
                 <button
                   type="submit"
-                  className="px-4 py-2 bg-red-600 text-white rounded-xl text-xs font-bold shadow-md hover:bg-red-500 cursor-pointer"
+                  className="px-5 py-2 bg-red-600 hover:bg-red-500 text-white rounded-xl text-xs font-bold shadow-md cursor-pointer font-telugu"
                 >
-                  యాడ్ ప్రచురించు
+                  {editingAd ? 'సవరణలు సేవ్ చేయి' : 'యాడ్ లైవ్ చేయి'}
                 </button>
               </div>
             </form>
