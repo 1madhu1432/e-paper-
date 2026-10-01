@@ -51,6 +51,7 @@ import { AdminNotificationsPage } from './pages/admin/AdminNotificationsPage';
 import { AdminLoginPage } from './pages/admin/AdminLoginPage';
 
 import { ScrollToTop } from './components/common/ScrollToTop';
+import { ErrorBoundary } from './components/common/ErrorBoundary';
 
 // Fallback loader
 const Loader = () => (
@@ -64,9 +65,10 @@ const Loader = () => (
 
 function App() {
   return (
-    <BrowserRouter>
-      <ScrollToTop />
-      <AuthProvider>
+    <ErrorBoundary>
+      <BrowserRouter>
+        <ScrollToTop />
+        <AuthProvider>
         <NotificationProvider>
           <SavedArticlesProvider>
             <UserPreferencesProvider>
@@ -166,7 +168,8 @@ function App() {
         </NotificationProvider>
       </AuthProvider>
     </BrowserRouter>
-  );
+  </ErrorBoundary>
+);
 }
 
 export default App;

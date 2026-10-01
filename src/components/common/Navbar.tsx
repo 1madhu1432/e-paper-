@@ -40,8 +40,20 @@ export const Navbar: React.FC = () => {
     const handleScroll = () => {
       setIsScrolled(window.scrollY > 120);
     };
+    const handleKeyDown = (e: KeyboardEvent) => {
+      if (e.key === 'Escape') {
+        setMobileMenuOpen(false);
+        setProfileMenuOpen(false);
+        setNotifDropdownOpen(false);
+        setShowSearchInput(false);
+      }
+    };
     window.addEventListener('scroll', handleScroll);
-    return () => window.removeEventListener('scroll', handleScroll);
+    window.addEventListener('keydown', handleKeyDown);
+    return () => {
+      window.removeEventListener('scroll', handleScroll);
+      window.removeEventListener('keydown', handleKeyDown);
+    };
   }, []);
 
   const handleSearchSubmit = (e: React.FormEvent) => {
@@ -377,11 +389,7 @@ export const Navbar: React.FC = () => {
       </div>
 
       {/* Primary Category Navigation Bar (Sticky on Scroll) */}
-      <nav
-        className={`w-full bg-[#990000] text-white transition-all shadow-md ${
-          isScrolled ? 'fixed top-0 left-0 right-0 z-50 py-1' : 'relative py-0'
-        }`}
-      >
+      <nav className="sticky top-0 z-40 w-full bg-[#990000] text-white shadow-md">
         <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
           <div className="flex items-center justify-between">
             {/* Logo in sticky mode */}
