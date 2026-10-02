@@ -18,21 +18,44 @@ interface AuthContextType {
 
 const AuthContext = createContext<AuthContextType | undefined>(undefined);
 
+const DEFAULT_PUBLIC_READER: User = {
+  id: 'guest-reader',
+  name: 'పాఠకుడు (Reader Guest)',
+  email: 'reader@janathavaani.com',
+  role: 'Reader',
+  avatar: 'https://images.unsplash.com/photo-1535713875002-d1d0cf377fde?auto=format&fit=crop&w=200&q=80',
+  status: 'active',
+  lastLogin: 'ఇప్పుడే',
+  permissions: {
+    canView: true,
+    canCreate: false,
+    canEdit: false,
+    canDelete: false,
+    canApprove: false,
+    canPublish: false,
+    canManageAds: false,
+    canManageEPaper: false,
+    canManageUsers: false,
+    canViewAnalytics: false,
+    canChangeSettings: false,
+  },
+};
+
 export const AuthProvider: React.FC<{ children: React.ReactNode }> = ({ children }) => {
   const [currentUser, setCurrentUser] = useState<User>(() => {
-    const saved = localStorage.getItem('jv_current_user');
+    const saved = localStorage.getItem('jv_current_user_v2');
     if (saved) {
       try {
         const parsed = JSON.parse(saved);
         if (parsed && parsed.role && parsed.id) return parsed;
       } catch (e) { /* ignore */ }
     }
-    return DEMO_USERS[0]; // Default Super Admin
+    return DEFAULT_PUBLIC_READER; // Clean Public Reader Mode by default
   });
 
   useEffect(() => {
     if (currentUser) {
-      localStorage.setItem('jv_current_user', JSON.stringify(currentUser));
+      localStorage.setItem('jv_current_user_v2', JSON.stringify(currentUser));
     }
   }, [currentUser]);
 

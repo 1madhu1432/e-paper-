@@ -12,6 +12,7 @@ import { AdBanner } from '../../components/common/AdBanner';
 import { ArticleCard } from '../../components/public/ArticleCard';
 import { Flame, Sparkles, TrendingUp, ChevronRight } from 'lucide-react';
 import { Link } from 'react-router-dom';
+import { PublicMoodSection } from '../../components/public/PublicMoodSection';
 
 export const HomePage: React.FC = () => {
   const [allArticles, setAllArticles] = useState<Article[]>(() => MockNewsService.getPublished());
@@ -133,6 +134,9 @@ export const HomePage: React.FC = () => {
             accentColor="#b91c1c"
             subcategories={['అసెంబ్లీ', 'పార్లమెంట్', 'ఎన్నికలు']}
           />
+
+          {/* Public Mood / People's Pulse Interactive Section */}
+          <PublicMoodSection />
 
           {/* Jobs & Education Combined Highlights */}
           <section className="bg-white rounded-2xl p-5 border border-slate-200/80 shadow-xs">

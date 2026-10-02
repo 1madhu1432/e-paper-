@@ -14,7 +14,8 @@ import {
   AlertCircle,
   ExternalLink,
   ChevronDown,
-  Sparkles
+  Sparkles,
+  BarChart3
 } from 'lucide-react';
 import { CATEGORIES } from '../../data/categories';
 import { RoleSwitcher } from './RoleSwitcher';
@@ -513,6 +514,18 @@ export const Navbar: React.FC = () => {
               >
                 <FileText className="w-3.5 h-3.5 text-amber-300" />
                 <span>ఈ-పేపర్</span>
+              </NavLink>
+
+              <NavLink
+                to="/polls"
+                className={({ isActive }) =>
+                  `px-2.5 py-1 rounded-md shrink-0 transition-colors flex items-center gap-1 ${
+                    isActive ? 'bg-black/30 text-amber-300 font-bold' : 'hover:bg-black/20 text-white/95'
+                  }`
+                }
+              >
+                <BarChart3 className="w-3.5 h-3.5 text-amber-300" />
+                <span>ప్రజా మూడ్</span>
               </NavLink>
             </div>
           </div>

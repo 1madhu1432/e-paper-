@@ -14,23 +14,25 @@ export const RoleSwitcher: React.FC = () => {
   }, [location.pathname]);
 
   const roles: { role: Role; label: string; icon: any; color: string; path: string }[] = [
+    { role: 'Reader', label: 'Public Mode (ప్రజా మోడ్ - పాఠకుడు)', icon: Eye, color: 'bg-emerald-600 text-white', path: '/' },
     { role: 'Super Admin', label: 'Super Admin (పూర్తి యాక్సెస్)', icon: ShieldCheck, color: 'bg-red-600 text-white', path: '/admin' },
     { role: 'Editor', label: 'Editor (సమీక్ష & ఆమోదం)', icon: Edit3, color: 'bg-indigo-600 text-white', path: '/admin/editor-workspace' },
-    { role: 'Reporter', label: 'Reporter (కథనాలు రాయడం)', icon: UserCheck, color: 'bg-emerald-600 text-white', path: '/admin/reporter-workspace' },
+    { role: 'Reporter', label: 'Reporter (కథనాలు రాయడం)', icon: UserCheck, color: 'bg-amber-600 text-white', path: '/admin/reporter-workspace' },
     { role: 'Social Media Manager', label: 'Social Media Manager', icon: Share2, color: 'bg-pink-600 text-white', path: '/admin/social' },
-    { role: 'Reader', label: 'Public Reader (పాఠకుడు)', icon: Eye, color: 'bg-slate-700 text-white', path: '/' },
   ];
 
   return (
     <div className="relative inline-block text-left z-50">
       <button
         onClick={() => setIsOpen(!isOpen)}
-        className="flex items-center gap-1.5 px-2.5 py-1 text-xs font-semibold rounded-full bg-slate-900 text-amber-300 border border-amber-400/40 shadow-sm hover:bg-slate-800 transition-colors"
-        title="Switch Demo Role"
+        className="flex items-center gap-1.5 px-2.5 py-1 text-xs font-semibold rounded-full bg-slate-900 text-amber-300 border border-amber-400/40 shadow-sm hover:bg-slate-800 transition-colors cursor-pointer"
+        title="Switch Mode / Role"
       >
-        <span className="w-2 h-2 rounded-full bg-emerald-400 animate-pulse" />
-        <span className="hidden sm:inline text-slate-300">DEMO ROLE:</span>
-        <span className="font-bold text-white">{currentRole}</span>
+        <span className={`w-2 h-2 rounded-full ${currentRole === 'Reader' ? 'bg-emerald-400' : 'bg-red-500 animate-pulse'}`} />
+        <span className="hidden sm:inline text-slate-300">మోడ్:</span>
+        <span className="font-bold text-white">
+          {currentRole === 'Reader' ? 'పబ్లిక్ (Public Mode)' : currentRole}
+        </span>
         <ChevronDown className="w-3.5 h-3.5 text-slate-400" />
       </button>
 
