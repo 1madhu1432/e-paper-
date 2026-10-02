@@ -1,173 +1,184 @@
 import React, { useState } from 'react';
-import {
-  Settings,
-  Save,
-  Globe,
-  Share2,
-  Lock,
-  Search,
-  CheckCircle,
-  Database,
-  Sparkles,
-} from 'lucide-react';
+import { useData } from '../../context/DataContext';
+import { Save, CheckCircle2, Globe, Sliders } from 'lucide-react';
 
 export const AdminSettingsPage: React.FC = () => {
-  const [siteName, setSiteName] = useState('PUBLIC MOOD');
-  const [siteNameTe, setSiteNameTe] = useState('పబ్లిక్ మూడ్');
-  const [tagline, setTagline] = useState('సత్యం - స్పష్టత - ప్రజా స్వరం');
-  const [contactPhone, setContactPhone] = useState('+91 98765 43210');
-  const [contactEmail, setContactEmail] = useState('editor@publicmood.com');
-  const [whatsappChannel, setWhatsappChannel] = useState('https://whatsapp.com/channel/publicmood');
-  const [youtubeChannel, setYoutubeChannel] = useState('https://youtube.com/@publicmoodnews');
-  const [analyticsId, setAnalyticsId] = useState('G-PMNEWS2024');
+  const { settings, updateSettings, states, editions } = useData();
+
+  const [brandName, setBrandName] = useState(settings.brandName);
+  const [tagline, setTagline] = useState(settings.tagline);
+  const [defaultState, setDefaultState] = useState(settings.defaultState);
+  const [defaultEdition, setDefaultEdition] = useState(settings.defaultEdition);
+  const [contactEmail, setContactEmail] = useState(settings.contactEmail);
+  const [contactPhone, setContactPhone] = useState(settings.contactPhone);
+  const [address, setAddress] = useState(settings.address);
+  const [autoFitWidth, setAutoFitWidth] = useState(settings.readerSettings.autoFitWidth);
 
   const [savedSuccess, setSavedSuccess] = useState(false);
 
-  const handleSave = (e: React.FormEvent) => {
+  const handleSubmit = (e: React.FormEvent) => {
     e.preventDefault();
+    updateSettings({
+      brandName,
+      tagline,
+      defaultState,
+      defaultEdition,
+      contactEmail,
+      contactPhone,
+      address,
+      readerSettings: { ...settings.readerSettings, autoFitWidth }
+    });
+
     setSavedSuccess(true);
     setTimeout(() => setSavedSuccess(false), 3000);
   };
 
   return (
-    <div className="space-y-6">
-      {/* Header */}
-      <div className="flex flex-col sm:flex-row sm:items-center justify-between gap-4 bg-white p-6 rounded-2xl border border-slate-200/80 shadow-xs">
+    <div className="max-w-4xl mx-auto space-y-6 font-sans">
+      <div className="bg-white p-6 rounded-xl border border-slate-200 shadow-xs flex items-center justify-between">
         <div>
-          <h1 className="text-xl font-bold font-telugu text-slate-900 flex items-center gap-2">
-            <Settings className="w-6 h-6 text-red-600" />
-            సిస్టమ్ & పోర్టల్ సెట్టింగ్‌లు (System Settings)
-          </h1>
-          <p className="text-xs text-slate-500 mt-1">
-            వెబ్‌సైట్ కాన్ఫిగరేషన్, సోషల్ మీడియా లింకులు మరియు సెక్యూరిటీ రూల్స్
-          </p>
+          <h1 className="text-2xl font-black font-serif text-[#0b1d3a]">System Settings</h1>
+          <p className="text-xs text-slate-500">Configure brand defaults, contact info, and reader settings</p>
         </div>
 
-        <button
-          form="settings-form"
-          type="submit"
-          className="px-5 py-2.5 bg-red-600 hover:bg-red-500 text-white rounded-xl text-xs font-bold transition-all shadow-md flex items-center justify-center gap-2 cursor-pointer shrink-0"
-        >
-          <Save className="w-4 h-4" />
-          <span>మార్పులను సేవ్ చేయి</span>
-        </button>
+        {savedSuccess && (
+          <div className="bg-emerald-100 text-emerald-800 border border-emerald-300 px-3 py-1.5 rounded-lg text-xs font-bold flex items-center gap-1.5">
+            <CheckCircle2 className="w-4 h-4 text-emerald-600" />
+            <span>Settings Saved to LocalStorage!</span>
+          </div>
+        )}
       </div>
 
-      {savedSuccess && (
-        <div className="p-4 bg-emerald-600 text-white rounded-2xl font-bold text-xs flex items-center gap-2 shadow-lg animate-in fade-in">
-          <CheckCircle className="w-5 h-5" />
-          <span>పోర్టల్ సెట్టింగ్‌లు విజయవంతంగా నవీకరించబడ్డాయి!</span>
-        </div>
-      )}
-
-      {/* Main Settings Form */}
-      <form id="settings-form" onSubmit={handleSave} className="space-y-6">
-        {/* General Site Config */}
-        <div className="bg-white p-6 rounded-2xl border border-slate-200/80 shadow-xs space-y-4">
-          <h3 className="text-base font-bold text-slate-900 font-telugu border-b pb-3 flex items-center gap-2">
-            <Globe className="w-4 h-4 text-red-600" />
-            సాధారణ పోర్టల్ వివరాలు (General Settings)
-          </h3>
+      <form onSubmit={handleSubmit} className="bg-white rounded-2xl p-6 sm:p-8 border border-slate-200 shadow-sm space-y-6">
+        {/* Section 1: Branding & Identification */}
+        <div className="space-y-4">
+          <h2 className="text-base font-bold font-serif text-[#0b1d3a] border-b border-slate-100 pb-2 flex items-center gap-2">
+            <Globe className="w-4 h-4 text-amber-500" />
+            <span>Branding &amp; Identity</span>
+          </h2>
 
           <div className="grid grid-cols-1 sm:grid-cols-2 gap-4">
             <div>
-              <label className="block text-xs font-bold text-slate-700 mb-1">పోర్టల్ పేరు (English)</label>
+              <label className="block text-xs font-bold text-slate-700 uppercase mb-1">Brand Name</label>
               <input
                 type="text"
-                value={siteName}
-                onChange={(e) => setSiteName(e.target.value)}
-                className="w-full px-3 py-2 bg-slate-50 border border-slate-200 rounded-xl text-xs focus:outline-none focus:border-red-500 font-bold"
+                value={brandName}
+                onChange={(e) => setBrandName(e.target.value)}
+                className="w-full px-3 py-2 text-xs bg-slate-50 border border-slate-300 rounded-lg font-bold"
               />
             </div>
-
             <div>
-              <label className="block text-xs font-bold text-slate-700 mb-1 font-telugu">పోర్టల్ పేరు (తెలుగు)</label>
-              <input
-                type="text"
-                value={siteNameTe}
-                onChange={(e) => setSiteNameTe(e.target.value)}
-                className="w-full px-3 py-2 bg-slate-50 border border-slate-200 rounded-xl text-xs font-telugu font-bold text-slate-900 focus:outline-none focus:border-red-500"
-              />
-            </div>
-
-            <div className="sm:col-span-2">
-              <label className="block text-xs font-bold text-slate-700 mb-1 font-telugu">టాగ్ లైన్ (Tagline)</label>
+              <label className="block text-xs font-bold text-slate-700 uppercase mb-1">Tagline</label>
               <input
                 type="text"
                 value={tagline}
                 onChange={(e) => setTagline(e.target.value)}
-                className="w-full px-3 py-2 bg-slate-50 border border-slate-200 rounded-xl text-xs font-telugu text-slate-800 focus:outline-none focus:border-red-500"
+                className="w-full px-3 py-2 text-xs bg-slate-50 border border-slate-300 rounded-lg"
               />
             </div>
+          </div>
+        </div>
 
+        {/* Section 2: Regional Defaults */}
+        <div className="space-y-4">
+          <h2 className="text-base font-bold font-serif text-[#0b1d3a] border-b border-slate-100 pb-2 flex items-center gap-2">
+            <Sliders className="w-4 h-4 text-amber-500" />
+            <span>Regional Defaults</span>
+          </h2>
+
+          <div className="grid grid-cols-1 sm:grid-cols-2 gap-4">
             <div>
-              <label className="block text-xs font-bold text-slate-700 mb-1">సంప్రదింపు ఫోన్ నంబర్</label>
-              <input
-                type="text"
-                value={contactPhone}
-                onChange={(e) => setContactPhone(e.target.value)}
-                className="w-full px-3 py-2 bg-slate-50 border border-slate-200 rounded-xl text-xs focus:outline-none focus:border-red-500"
-              />
+              <label className="block text-xs font-bold text-slate-700 uppercase mb-1">Default State</label>
+              <select
+                value={defaultState}
+                onChange={(e) => setDefaultState(e.target.value)}
+                className="w-full px-3 py-2 text-xs bg-slate-50 border border-slate-300 rounded-lg"
+              >
+                {states.map(s => (
+                  <option key={s.id} value={s.id}>{s.name}</option>
+                ))}
+              </select>
             </div>
-
             <div>
-              <label className="block text-xs font-bold text-slate-700 mb-1">ఈమెయిల్ అడ్రస్</label>
+              <label className="block text-xs font-bold text-slate-700 uppercase mb-1">Default Edition</label>
+              <select
+                value={defaultEdition}
+                onChange={(e) => setDefaultEdition(e.target.value)}
+                className="w-full px-3 py-2 text-xs bg-slate-50 border border-slate-300 rounded-lg"
+              >
+                {editions.map(ed => (
+                  <option key={ed.id} value={ed.id}>{ed.name}</option>
+                ))}
+              </select>
+            </div>
+          </div>
+        </div>
+
+        {/* Section 3: Contact Details */}
+        <div className="space-y-4">
+          <h2 className="text-base font-bold font-serif text-[#0b1d3a] border-b border-slate-100 pb-2">
+            Contact Information
+          </h2>
+
+          <div className="grid grid-cols-1 sm:grid-cols-2 gap-4">
+            <div>
+              <label className="block text-xs font-bold text-slate-700 uppercase mb-1">Contact Email</label>
               <input
                 type="email"
                 value={contactEmail}
                 onChange={(e) => setContactEmail(e.target.value)}
-                className="w-full px-3 py-2 bg-slate-50 border border-slate-200 rounded-xl text-xs focus:outline-none focus:border-red-500"
+                className="w-full px-3 py-2 text-xs bg-slate-50 border border-slate-300 rounded-lg"
+              />
+            </div>
+            <div>
+              <label className="block text-xs font-bold text-slate-700 uppercase mb-1">Contact Phone</label>
+              <input
+                type="text"
+                value={contactPhone}
+                onChange={(e) => setContactPhone(e.target.value)}
+                className="w-full px-3 py-2 text-xs bg-slate-50 border border-slate-300 rounded-lg"
               />
             </div>
           </div>
-        </div>
-
-        {/* Social Media Integrations */}
-        <div className="bg-white p-6 rounded-2xl border border-slate-200/80 shadow-xs space-y-4">
-          <h3 className="text-base font-bold text-slate-900 font-telugu border-b pb-3 flex items-center gap-2">
-            <Share2 className="w-4 h-4 text-red-600" />
-            సోషల్ మీడియా & చానల్స్ (Social & Distribution)
-          </h3>
-
-          <div className="grid grid-cols-1 sm:grid-cols-2 gap-4">
-            <div>
-              <label className="block text-xs font-bold text-slate-700 mb-1">WhatsApp Channel URL</label>
-              <input
-                type="text"
-                value={whatsappChannel}
-                onChange={(e) => setWhatsappChannel(e.target.value)}
-                className="w-full px-3 py-2 bg-slate-50 border border-slate-200 rounded-xl text-xs focus:outline-none focus:border-red-500"
-              />
-            </div>
-
-            <div>
-              <label className="block text-xs font-bold text-slate-700 mb-1">YouTube Channel URL</label>
-              <input
-                type="text"
-                value={youtubeChannel}
-                onChange={(e) => setYoutubeChannel(e.target.value)}
-                className="w-full px-3 py-2 bg-slate-50 border border-slate-200 rounded-xl text-xs focus:outline-none focus:border-red-500"
-              />
-            </div>
-          </div>
-        </div>
-
-        {/* SEO Analytics */}
-        <div className="bg-white p-6 rounded-2xl border border-slate-200/80 shadow-xs space-y-4">
-          <h3 className="text-base font-bold text-slate-900 font-telugu border-b pb-3 flex items-center gap-2">
-            <Search className="w-4 h-4 text-red-600" />
-            SEO & Google Analytics కాన్ఫిగరేషన్
-          </h3>
 
           <div>
-            <label className="block text-xs font-bold text-slate-700 mb-1">Google Analytics Measurement ID</label>
-            <input
-              type="text"
-              value={analyticsId}
-              onChange={(e) => setAnalyticsId(e.target.value)}
-              className="w-full px-3 py-2 bg-slate-50 border border-slate-200 rounded-xl text-xs font-mono text-slate-800 focus:outline-none focus:border-red-500"
+            <label className="block text-xs font-bold text-slate-700 uppercase mb-1">Head Office Address</label>
+            <textarea
+              rows={2}
+              value={address}
+              onChange={(e) => setAddress(e.target.value)}
+              className="w-full px-3 py-2 text-xs bg-slate-50 border border-slate-300 rounded-lg"
             />
           </div>
+        </div>
+
+        {/* Section 4: Reader Controls */}
+        <div className="space-y-4">
+          <h2 className="text-base font-bold font-serif text-[#0b1d3a] border-b border-slate-100 pb-2">
+            Reader Controls
+          </h2>
+
+          <div className="space-y-3">
+            <label className="flex items-center gap-2 text-xs font-bold text-slate-700 cursor-pointer">
+              <input
+                type="checkbox"
+                checked={autoFitWidth}
+                onChange={(e) => setAutoFitWidth(e.target.checked)}
+                className="rounded text-blue-600"
+              />
+              <span>Auto-fit E-Paper reader width by default</span>
+            </label>
+          </div>
+        </div>
+
+        <div className="flex justify-end pt-4 border-t border-slate-100">
+          <button
+            type="submit"
+            className="bg-[#1e40af] hover:bg-[#0b1d3a] text-white font-black px-6 py-2.5 rounded-xl text-xs transition shadow-md flex items-center gap-2"
+          >
+            <Save className="w-4 h-4" />
+            <span>SAVE ALL SETTINGS</span>
+          </button>
         </div>
       </form>
     </div>

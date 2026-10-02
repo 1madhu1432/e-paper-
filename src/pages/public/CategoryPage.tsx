@@ -4,9 +4,8 @@ import { MockNewsService } from '../../services/mockNewsService';
 import { CATEGORIES } from '../../data/categories';
 import { Article } from '../../types';
 import { ArticleCard } from '../../components/public/ArticleCard';
-import { AdBanner } from '../../components/common/AdBanner';
 import { TrendingSidebar } from '../../components/public/TrendingSidebar';
-import { Filter, SlidersHorizontal, ChevronRight } from 'lucide-react';
+import { ChevronRight } from 'lucide-react';
 
 export const CategoryPage: React.FC = () => {
   const { slug } = useParams<{ slug: string }>();
@@ -95,11 +94,6 @@ export const CategoryPage: React.FC = () => {
         </div>
       </div>
 
-      {/* Category Top Ad */}
-      <div className="mb-6">
-        <AdBanner placement="category-top" />
-      </div>
-
       {/* Filter and Sorting Controls */}
       <div className="bg-white rounded-xl p-3 sm:p-4 border border-slate-200/80 shadow-xs mb-6 flex flex-col sm:flex-row items-start sm:items-center justify-between gap-3">
         {/* Subcategories pills */}
@@ -177,11 +171,6 @@ export const CategoryPage: React.FC = () => {
             ))
           )}
 
-          {/* Category Middle Ad */}
-          <div className="py-4">
-            <AdBanner placement="category-middle" />
-          </div>
-
           {/* Pagination */}
           {totalPages > 1 && (
             <div className="flex items-center justify-center gap-2 pt-6">
@@ -219,7 +208,6 @@ export const CategoryPage: React.FC = () => {
         {/* Sidebar */}
         <aside className="lg:col-span-4 space-y-6">
           <TrendingSidebar articles={trendingArticles} />
-          <AdBanner placement="sidebar" />
         </aside>
       </div>
     </div>

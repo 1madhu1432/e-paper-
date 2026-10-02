@@ -11,15 +11,12 @@ export const PublicLayout: React.FC = () => {
   const isEpaperViewer = location.pathname.startsWith('/epaper/') && location.pathname !== '/epaper';
 
   return (
-    <div className="min-h-screen flex flex-col bg-[#f8fafc] text-slate-900 selection:bg-red-500 selection:text-white">
+    <div className="min-h-screen flex flex-col bg-[#f8fafc] text-slate-900 selection:bg-[#1e40af] selection:text-white">
       {/* Sticky/Responsive Navigation */}
       <Navbar />
 
-      {/* Breaking News Ticker (hide on viewer if desired, or show everywhere) */}
-      {!isEpaperViewer && <BreakingTicker />}
-
       {/* Main Outlet */}
-      <main className="flex-1 w-full pb-16 lg:pb-0">
+      <main className="flex-1 w-full">
         <Outlet />
       </main>
 

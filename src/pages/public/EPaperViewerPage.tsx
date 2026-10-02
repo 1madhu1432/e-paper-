@@ -1,228 +1,293 @@
-import React, { useState, useEffect } from 'react';
-import { useParams, Link } from 'react-router-dom';
-import { MockEPaperService } from '../../services/mockEPaperService';
-import { EPaper } from '../../types';
-import { 
-  ChevronLeft, 
-  ChevronRight, 
-  ZoomIn, 
-  ZoomOut, 
-  Maximize2, 
-  Minimize2, 
-  Download, 
-  Share2, 
-  ArrowLeft,
-  BookOpen,
-  Calendar,
-  Layers
+import React, { useState, useEffect, useRef } from 'react';
+import { useParams, useNavigate, Link } from 'react-router-dom';
+import { useData } from '../../context/DataContext';
+import {
+  ChevronLeft, ChevronRight, ZoomIn, ZoomOut, Maximize2, Minimize2,
+  Grid, X, Sparkles, Copy, Share2, Calendar, ChevronDown
 } from 'lucide-react';
 
 export const EPaperViewerPage: React.FC = () => {
   const { id } = useParams<{ id: string }>();
-  const [edition, setEdition] = useState<EPaper | undefined>(undefined);
+  const navigate = useNavigate();
+  const { epapers, states, subEditions, editions, incrementEPaperView, incrementEPaperPageView } = useData();
+
+  // Find selected epaper
+  const epaper = epapers.find(ep => ep.id === id) || epapers[0];
+
   const [currentPage, setCurrentPage] = useState<number>(1);
   const [zoomLevel, setZoomLevel] = useState<number>(100);
   const [isFullscreen, setIsFullscreen] = useState<boolean>(false);
+  const [isGridViewOpen, setIsGridViewOpen] = useState<boolean>(false);
+  const [selectedDate, setSelectedDate] = useState<string>(epaper?.date || '2026-10-02');
+  const [selectedEditionName, setSelectedEditionName] = useState<string>('Main Edition');
+  const [selectedSubEditionName, setSelectedSubEditionName] = useState<string>(epaper?.subEditionName || 'HYDERABAD');
+
+  const containerRef = useRef<HTMLDivElement>(null);
 
   useEffect(() => {
-    if (id) {
-      const ed = MockEPaperService.getById(id);
-      setEdition(ed);
-      if (ed) {
-        MockEPaperService.incrementViews(ed.id);
-      }
+    if (epaper) {
+      incrementEPaperView(epaper.id);
     }
-  }, [id]);
+  }, [epaper?.id]);
 
-  if (!edition) {
-    return (
-      <div className="max-w-xl mx-auto py-24 text-center">
-        <h2 className="text-xl font-bold text-slate-800">ఈ-పేపర్ ఎడిషన్ కనుగొనబడలేదు</h2>
-        <Link to="/epaper" className="inline-block mt-4 px-5 py-2 bg-red-600 text-white rounded-xl text-xs font-bold">
-          ఈ-పేపర్ పేజీకి తిరిగి వెళ్లండి
-        </Link>
-      </div>
-    );
-  }
+  useEffect(() => {
+    if (epaper) {
+      incrementEPaperPageView(epaper.id, currentPage);
+    }
+  }, [currentPage, epaper?.id]);
 
-  const pages = edition.pages && edition.pages.length > 0 ? edition.pages : [
-    { pageNumber: 1, title: 'ముఖ్యాంశాలు', imageUrl: edition.coverImage },
-    { pageNumber: 2, title: 'రాష్ట్ర వార్తలు', imageUrl: 'https://images.unsplash.com/photo-1504711434969-e33886168f5c?auto=format&fit=crop&w=1200&q=80' },
-    { pageNumber: 3, title: 'జిల్లా సమాచారం', imageUrl: 'https://images.unsplash.com/photo-1586528116311-ad8dd3c8310d?auto=format&fit=crop&w=1200&q=80' },
-    { pageNumber: 4, title: 'క్రీడలు & సినిమా', imageUrl: 'https://images.unsplash.com/photo-1540747913346-19e32dc3e97e?auto=format&fit=crop&w=1200&q=80' },
-  ];
+  // Keyboard navigation
+  useEffect(() => {
+    const handleKeyDown = (e: KeyboardEvent) => {
+      if (e.key === 'ArrowLeft') {
+        goToPrevPage();
+      } else if (e.key === 'ArrowRight') {
+        goToNextPage();
+      } else if (e.key === 'Escape') {
+        if (isFullscreen) {
+          exitFullscreen();
+        } else {
+          navigate('/epaper');
+        }
+      }
+    };
+    window.addEventListener('keydown', handleKeyDown);
+    return () => window.removeEventListener('keydown', handleKeyDown);
+  }, [currentPage, epaper, isFullscreen]);
 
-  const activePageObj = pages[currentPage - 1] || pages[0];
+  const totalPages = epaper ? epaper.totalPages : 12;
+  const activePageData = epaper?.pages?.find(p => p.pageNumber === currentPage) || epaper?.pages?.[0];
 
-  const handlePrevPage = () => {
-    setCurrentPage(prev => Math.max(1, prev - 1));
+  const goToPrevPage = () => {
+    if (currentPage > 1) setCurrentPage(prev => prev - 1);
   };
 
-  const handleNextPage = () => {
-    setCurrentPage(prev => Math.min(pages.length, prev + 1));
-  };
-
-  const handleZoomIn = () => {
-    setZoomLevel(prev => Math.min(200, prev + 25));
-  };
-
-  const handleZoomOut = () => {
-    setZoomLevel(prev => Math.max(75, prev - 25));
-  };
-
-  const handleResetZoom = () => {
-    setZoomLevel(100);
+  const goToNextPage = () => {
+    if (currentPage < totalPages) setCurrentPage(prev => prev + 1);
   };
 
   const toggleFullscreen = () => {
     if (!document.fullscreenElement) {
-      document.documentElement.requestFullscreen().catch(() => {});
+      containerRef.current?.requestFullscreen().catch(err => console.error(err));
       setIsFullscreen(true);
     } else {
-      if (document.exitFullscreen) {
-        document.exitFullscreen().catch(() => {});
-        setIsFullscreen(false);
-      }
+      exitFullscreen();
     }
   };
 
-  const handleShare = () => {
-    if (navigator.share) {
-      navigator.share({
-        title: `${edition.editionNameTe} - పబ్లిక్ మూడ్ ఈ-పేపర్`,
-        url: window.location.href,
-      }).catch(() => {});
-    } else {
-      navigator.clipboard.writeText(window.location.href);
-      alert('ఈ-పేపర్ లింక్ కాపీ చేయబడింది!');
+  const exitFullscreen = () => {
+    if (document.fullscreenElement) {
+      document.exitFullscreen().catch(err => console.error(err));
+      setIsFullscreen(false);
     }
   };
+
+
 
   return (
-    <div className={`min-h-screen bg-slate-900 text-white flex flex-col ${isFullscreen ? 'fixed inset-0 z-50' : ''}`}>
-      {/* Top Controls Bar */}
-      <div className="bg-slate-950 border-b border-slate-800 px-4 py-2.5 flex items-center justify-between shrink-0 shadow-md">
-        <div className="flex items-center gap-3">
-          <Link
-            to="/epaper"
-            className="flex items-center gap-1 text-slate-300 hover:text-white text-xs font-semibold p-1 rounded-lg hover:bg-slate-800"
-          >
-            <ArrowLeft className="w-4 h-4" />
-            <span className="hidden sm:inline">అన్ని ఎడిషన్లు</span>
-          </Link>
-          <div className="h-4 w-px bg-slate-800 hidden sm:block" />
-          <div>
-            <h1 className="text-xs sm:text-sm font-bold text-white line-clamp-1">{edition.editionNameTe}</h1>
-            <p className="text-[10px] text-slate-400">{edition.date} • {edition.district}</p>
-          </div>
-        </div>
+    <div
+      ref={containerRef}
+      onContextMenu={(e) => e.preventDefault()}
+      className={`min-h-screen bg-slate-100 font-sans text-slate-900 flex flex-col no-copy select-none ${
+        isFullscreen ? 'fixed inset-0 z-50 overflow-hidden bg-white' : ''
+      }`}
+    >
+      {/* ========================================================= */}
+      {/* SUB-HEADER TOOLBAR (INTEGRATED BRAND LOGO & CONTROLS) */}
+      {/* ========================================================= */}
+      <div className="bg-white border-b border-slate-300 py-2 px-4 sm:px-8 shadow-2xs">
+        <div className="max-w-[1500px] mx-auto flex flex-wrap items-center justify-between gap-3 text-xs font-bold text-slate-800">
 
-        {/* Center Page Nav Buttons */}
-        <div className="flex items-center gap-2">
-          <button
-            onClick={handlePrevPage}
-            disabled={currentPage === 1}
-            className="p-1.5 rounded-lg bg-slate-800 hover:bg-slate-700 disabled:opacity-30 disabled:cursor-not-allowed"
-            title="Previous Page"
-          >
-            <ChevronLeft className="w-4 h-4" />
-          </button>
+          {/* Left Controls: Compact Brand Logo + Date, Main Edition, Sub-Edition, Magazine */}
+          <div className="flex flex-wrap items-center gap-2 sm:gap-3">
+            
+            {/* Compact Brand Logo */}
+            <Link to="/" className="flex items-center mr-2 group">
+              <img
+                src="/public-mood-logo.jpg"
+                alt="Public Mood Logo"
+                className="h-10 sm:h-12 w-auto object-contain"
+              />
+            </Link>
 
-          <span className="text-xs font-bold px-2 py-1 bg-slate-800 rounded-lg text-amber-300">
-            పేజీ {currentPage} / {pages.length}
-          </span>
+            {/* Date Dropdown */}
+            <div className="flex items-center border border-slate-300 bg-white px-2 py-1 rounded text-slate-700 cursor-pointer">
+              <span>02-Oct-26</span>
+              <ChevronDown className="w-3.5 h-3.5 ml-1 text-slate-500" />
+            </div>
 
-          <button
-            onClick={handleNextPage}
-            disabled={currentPage === pages.length}
-            className="p-1.5 rounded-lg bg-slate-800 hover:bg-slate-700 disabled:opacity-30 disabled:cursor-not-allowed"
-            title="Next Page"
-          >
-            <ChevronRight className="w-4 h-4" />
-          </button>
-        </div>
+            {/* Main Edition Dropdown */}
+            <div className="flex items-center border border-slate-300 bg-white px-2 py-1 rounded text-slate-700 cursor-pointer">
+              <span>{selectedEditionName}</span>
+              <ChevronDown className="w-3.5 h-3.5 ml-1 text-slate-500" />
+            </div>
 
-        {/* Right Toolbar Actions */}
-        <div className="flex items-center gap-1.5 sm:gap-2">
-          {/* Zoom Controls */}
-          <div className="hidden sm:flex items-center bg-slate-800 rounded-lg p-0.5 border border-slate-700">
-            <button onClick={handleZoomOut} className="p-1.5 text-slate-300 hover:text-white" title="Zoom Out">
-              <ZoomOut className="w-4 h-4" />
-            </button>
-            <button onClick={handleResetZoom} className="px-2 text-xs font-bold text-amber-300" title="Reset Zoom">
-              {zoomLevel}%
-            </button>
-            <button onClick={handleZoomIn} className="p-1.5 text-slate-300 hover:text-white" title="Zoom In">
-              <ZoomIn className="w-4 h-4" />
-            </button>
+            {/* Sub-Edition Dropdown */}
+            <div className="flex items-center border border-slate-300 bg-white px-2.5 py-1 rounded text-[#0b1d3a] font-extrabold uppercase bg-amber-50/50 cursor-pointer">
+              <span>{selectedSubEditionName}</span>
+              <ChevronDown className="w-3.5 h-3.5 ml-1 text-slate-500" />
+            </div>
+
+            {/* Sunday Magazine Dropdown */}
+            <div className="hidden md:flex items-center border border-slate-300 bg-white px-2 py-1 rounded text-slate-700 cursor-pointer uppercase">
+              <span>SUNDAY MAGAZINE</span>
+              <ChevronDown className="w-3.5 h-3.5 ml-1 text-slate-500" />
+            </div>
           </div>
 
-          <button
-            onClick={toggleFullscreen}
-            className="p-1.5 sm:p-2 bg-slate-800 hover:bg-slate-700 text-slate-300 hover:text-white rounded-lg"
-            title={isFullscreen ? 'Exit Fullscreen' : 'Fullscreen'}
-          >
-            {isFullscreen ? <Minimize2 className="w-4 h-4" /> : <Maximize2 className="w-4 h-4" />}
-          </button>
+          {/* Center & Right Controls: Page Prev/Next, Thumbnails, Zoom, Fullscreen */}
+          <div className="flex items-center gap-3">
 
-          <a
-            href={edition.pdfUrl}
-            target="_blank"
-            rel="noreferrer"
-            onClick={() => MockEPaperService.incrementDownloads(edition.id)}
-            className="p-1.5 sm:p-2 bg-red-600 hover:bg-red-700 text-white rounded-lg flex items-center gap-1 text-xs font-bold"
-            title="Download PDF"
-          >
-            <Download className="w-4 h-4" />
-            <span className="hidden md:inline">డౌన్‌లోడ్</span>
-          </a>
+            {/* Page Navigation Switcher: ← 01: Page ▼ → */}
+            <div className="flex items-center border border-slate-300 bg-white rounded overflow-hidden">
+              <button
+                onClick={goToPrevPage}
+                disabled={currentPage <= 1}
+                className="px-2 py-1 hover:bg-slate-100 disabled:opacity-40 transition border-r border-slate-300"
+                title="Previous Page"
+              >
+                &larr;
+              </button>
 
-          <button
-            onClick={handleShare}
-            className="p-1.5 sm:p-2 bg-slate-800 hover:bg-slate-700 text-slate-300 hover:text-white rounded-lg"
-            title="Share"
-          >
-            <Share2 className="w-4 h-4" />
-          </button>
+              <div className="flex items-center gap-1 px-2 text-xs font-bold text-slate-800">
+                <span className="text-[#1e40af]">{String(currentPage).padStart(2, '0')}</span>
+                <span>: Page</span>
+                <ChevronDown className="w-3 h-3 text-slate-500" />
+              </div>
+
+              <button
+                onClick={goToNextPage}
+                disabled={currentPage >= totalPages}
+                className="px-2 py-1 hover:bg-slate-100 disabled:opacity-40 transition border-l border-slate-300"
+                title="Next Page"
+              >
+                &rarr;
+              </button>
+            </div>
+
+            {/* Grid Icon Button (Thumbnails) */}
+            <button
+              onClick={() => setIsGridViewOpen(!isGridViewOpen)}
+              className={`p-1.5 border border-slate-300 rounded bg-white hover:bg-slate-100 transition ${
+                isGridViewOpen ? 'bg-amber-100 border-amber-400' : ''
+              }`}
+              title="Page Thumbnails"
+            >
+              <Grid className="w-4 h-4 text-slate-700" />
+            </button>
+
+            {/* Zoom Controls: 🔍 - 1 + 🔍 */}
+            <div className="flex items-center gap-1 border border-slate-300 bg-white px-2 py-0.5 rounded">
+              <span className="text-xs">🔍</span>
+              <button
+                onClick={() => setZoomLevel(prev => Math.max(prev - 25, 50))}
+                className="px-1 font-bold text-slate-700 hover:text-[#1e40af]"
+              >
+                -
+              </button>
+              <span className="text-xs font-mono px-1">{zoomLevel / 100}</span>
+              <button
+                onClick={() => setZoomLevel(prev => Math.min(prev + 25, 200))}
+                className="px-1 font-bold text-slate-700 hover:text-[#1e40af]"
+              >
+                +
+              </button>
+              <span className="text-xs">🔍</span>
+            </div>
+
+            {/* Fullscreen / Fit button */}
+            <button
+              onClick={toggleFullscreen}
+              className="p-1.5 border border-slate-300 rounded bg-white hover:bg-slate-100 transition text-slate-700"
+              title="Fullscreen View"
+            >
+              <Maximize2 className="w-4 h-4" />
+            </button>
+          </div>
+
         </div>
       </div>
 
-      {/* Main Newspaper Canvas Viewport */}
-      <div className="flex-1 overflow-auto flex items-center justify-center p-4 sm:p-8 bg-slate-950/60 relative">
+      {/* ========================================================= */}
+      {/* 3. BREAKING NEWS CYAN TICKER BAR (EXACT SCREENSHOT MATCH) */}
+      {/* ========================================================= */}
+      <div className="bg-[#00a8e8] text-white flex items-center text-xs font-bold overflow-hidden shadow-xs">
+        <div className="bg-[#0088cc] px-4 py-1.5 text-white font-extrabold shrink-0 uppercase tracking-wide">
+          BREAKING NEWS:
+        </div>
+        <div className="overflow-hidden whitespace-nowrap py-1.5 px-4 w-full">
+          <div className="inline-block animate-marquee space-x-8 text-white font-medium">
+            <span>• మహిళా హాకీలో భారత్ కు స్వర్ణం</span>
+            <span>• జిలపాదుతూ తల్లి కునుకు.. నీటి సంపులో పడి చిన్నారి మృతి</span>
+            <span>• ముంబాయిలో CJP ఆందోళన.. పలువురు ప్రముఖుల సంఫీభావం</span>
+            <span>• తెలంగాణ అసెంబ్లీలో కొత్త ఐటీ బిల్లు ఏకగ్రీవ ఆమోదం</span>
+            <span>• శంషాబాద్ మెట్రో ఫేజ్-2 పనులకు మార్గం సుగమం</span>
+          </div>
+        </div>
+      </div>
+
+      {/* ========================================================= */}
+      {/* 4. MAIN NEWSPAPER CANVAS DISPLAY AREA */}
+      {/* ========================================================= */}
+      <main className="flex-1 bg-[#e2e8f0] p-4 sm:p-8 flex items-center justify-center overflow-auto relative min-h-[750px]">
+        
+        {/* Thumbnails Modal Drawer if Toggled */}
+        {isGridViewOpen && (
+          <div className="absolute top-4 left-4 z-40 bg-white border border-slate-300 rounded-xl p-4 shadow-2xl max-w-xs w-full space-y-3">
+            <div className="flex items-center justify-between border-b border-slate-200 pb-2">
+              <span className="font-bold text-xs text-[#0b1d3a]">All {totalPages} Pages</span>
+              <button onClick={() => setIsGridViewOpen(false)} className="text-slate-400 hover:text-slate-800">
+                <X className="w-4 h-4" />
+              </button>
+            </div>
+            <div className="grid grid-cols-3 gap-2 max-h-[400px] overflow-y-auto p-1">
+              {epaper.pages?.map(p => (
+                <button
+                  key={p.pageNumber}
+                  onClick={() => {
+                    setCurrentPage(p.pageNumber);
+                    setIsGridViewOpen(false);
+                  }}
+                  className={`border rounded overflow-hidden p-0.5 text-center transition ${
+                    p.pageNumber === currentPage ? 'border-blue-600 ring-2 ring-blue-500/40' : 'border-slate-300 hover:border-slate-500'
+                  }`}
+                >
+                  <img src={p.imageUrl} alt={`Page ${p.pageNumber}`} className="w-full aspect-[3/4] object-cover" />
+                  <span className="text-[10px] font-bold text-slate-700 block mt-0.5">P.{p.pageNumber}</span>
+                </button>
+              ))}
+            </div>
+          </div>
+        )}
+
+        {/* Newspaper Page Container */}
         <div
-          className="transition-transform duration-200 ease-out shadow-2xl rounded-sm overflow-hidden bg-white max-w-full"
-          style={{ transform: `scale(${zoomLevel / 100})`, transformOrigin: 'top center' }}
+          className="bg-white shadow-2xl border border-slate-300 transition-transform duration-150 origin-top relative group"
+          style={{
+            transform: `scale(${zoomLevel / 100})`,
+            maxWidth: '1000px',
+            width: '100%',
+          }}
         >
-          <img
-            src={activePageObj.imageUrl}
-            alt={activePageObj.title}
-            className="max-h-[82vh] w-auto object-contain select-none pointer-events-none"
-          />
-        </div>
-      </div>
+          {activePageData ? (
+            <>
+              <img
+                src={activePageData.imageUrl}
+                alt={`Public Mood Page ${currentPage}`}
+                className="w-full h-auto object-contain block shadow-xs"
+              />
 
-      {/* Bottom Thumbnail Strip */}
-      <div className="h-20 bg-slate-950 border-t border-slate-800 px-4 flex items-center gap-3 overflow-x-auto no-scrollbar shrink-0">
-        <span className="text-[11px] font-bold text-slate-400 flex items-center gap-1 uppercase tracking-wider shrink-0">
-          <Layers className="w-3.5 h-3.5" /> పేజీలు:
-        </span>
-        {pages.map((p, idx) => (
-          <button
-            key={p.pageNumber}
-            onClick={() => setCurrentPage(idx + 1)}
-            className={`relative rounded-md overflow-hidden h-14 w-11 shrink-0 border-2 transition-all ${
-              currentPage === idx + 1
-                ? 'border-red-500 scale-105 shadow-md'
-                : 'border-slate-700 opacity-60 hover:opacity-100'
-            }`}
-          >
-            <img src={p.imageUrl} alt={p.title} className="w-full h-full object-cover" />
-            <span className="absolute bottom-0 inset-x-0 bg-black/80 text-[9px] font-bold text-white text-center">
-              {idx + 1}
-            </span>
-          </button>
-        ))}
-      </div>
+
+            </>
+          ) : (
+            <div className="w-[800px] h-[1100px] bg-white flex items-center justify-center text-slate-400 font-serif">
+              Rendering E-Paper Page...
+            </div>
+          )}
+        </div>
+      </main>
+
+
     </div>
   );
 };

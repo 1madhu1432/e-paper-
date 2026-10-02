@@ -1,316 +1,215 @@
 import React, { useState } from 'react';
-import { Link } from 'react-router-dom';
+import { useData } from '../../context/DataContext';
+import { initialVisitorAnalytics, initialLiveActivity } from '../../data/analytics';
 import {
-  FileText,
-  Users,
-  Eye,
-  AlertTriangle,
-  Plus,
-  TrendingUp,
-  Clock,
-  Sparkles,
-  ArrowUpRight,
-  Flame,
-  Bell,
-  FileCheck,
-  CheckCircle,
-  XCircle,
-  MoreVertical,
-  Layers,
+  Users, Eye, BookOpen, Newspaper, MapPin, Layers, FileText, Info, ArrowUpRight
 } from 'lucide-react';
 import {
-  ResponsiveContainer,
-  AreaChart,
-  Area,
-  XAxis,
-  YAxis,
-  Tooltip,
-  BarChart,
-  Bar,
-  CartesianGrid,
+  ResponsiveContainer, AreaChart, Area, BarChart, Bar, XAxis, YAxis, Tooltip, CartesianGrid, PieChart as RePieChart, Pie, Cell
 } from 'recharts';
-import { MOCK_DAILY_TRAFFIC, MOCK_CATEGORY_METRICS } from '../../data/mockAnalytics';
-import { MOCK_ARTICLES } from '../../data/mockArticles';
-import { MOCK_NEWS_TIPS } from '../../data/mockNewsTips';
-import { useAuth } from '../../context/AuthContext';
 
 export const AdminDashboard: React.FC = () => {
-  const { currentUser, currentRole } = useAuth();
+  const { states, subEditions, editions, epapers, news } = useData();
 
-  const [breakingNewsActive, setBreakingNewsActive] = useState(true);
-  const [articlesList, setArticlesList] = useState(MOCK_ARTICLES.slice(0, 6));
+  const [timeRange, setTimeRange] = useState<'today' | '7days' | '30days' | 'all'>('7days');
 
-  const stats = [
-    {
-      title: 'నేటి మొత్తం వీక్షణలు (Today Views)',
-      value: '9,60,450',
-      change: '+18.4%',
-      isPositive: true,
-      icon: Eye,
-      color: 'text-blue-600',
-      bgColor: 'bg-blue-50',
-    },
-    {
-      title: 'లైవ్ రీడర్లు (Active Now)',
-      value: '14,280',
-      change: '+6.2%',
-      isPositive: true,
-      icon: Users,
-      color: 'text-emerald-600',
-      bgColor: 'bg-emerald-50',
-    },
-    {
-      title: 'మొత్తం వ్యాసాలు (Total Articles)',
-      value: '52',
-      change: '12 ప్రచురితం',
-      isPositive: true,
-      icon: FileText,
-      color: 'text-purple-600',
-      bgColor: 'bg-purple-50',
-    },
-    {
-      title: 'పరిశీలించాల్సిన టిప్స్ (News Tips)',
-      value: '8 పెంజింగ్',
-      change: '4 అత్యవసరం',
-      isPositive: false,
-      icon: AlertTriangle,
-      color: 'text-amber-600',
-      bgColor: 'bg-amber-50',
-    },
+  // Summary Metrics calculations
+  const totalVisitors = initialVisitorAnalytics.totalVisitors;
+  const todayVisitors = initialVisitorAnalytics.todayVisitors;
+  const totalPageViews = initialVisitorAnalytics.pageViews;
+  const todayPageViews = initialVisitorAnalytics.todayPageViews;
+
+  const totalEPaperReaders = epapers.reduce((acc, ep) => acc + (ep.readers || 0), 0);
+  const todayEPaperReaders = Math.round(totalEPaperReaders * 0.18);
+
+  const totalNewsViews = news.reduce((acc, n) => acc + n.views, 0);
+  const todayNewsViews = Math.round(totalNewsViews * 0.22);
+
+  const statCards = [
+    { title: "TOTAL VISITORS", value: totalVisitors.toLocaleString(), change: "+14%", icon: Users, color: "text-blue-600", bg: "bg-blue-50" },
+    { title: "TODAY'S VISITORS", value: todayVisitors.toLocaleString(), change: "+8%", icon: Users, color: "text-emerald-600", bg: "bg-emerald-50" },
+    { title: "TOTAL PAGE VIEWS", value: totalPageViews.toLocaleString(), change: "+18%", icon: Eye, color: "text-indigo-600", bg: "bg-indigo-50" },
+    { title: "TODAY'S PAGE VIEWS", value: todayPageViews.toLocaleString(), change: "+12%", icon: Eye, color: "text-sky-600", bg: "bg-sky-50" },
+    { title: "TOTAL E-PAPER READERS", value: totalEPaperReaders.toLocaleString(), change: "+24%", icon: BookOpen, color: "text-amber-600", bg: "bg-amber-50" },
+    { title: "TODAY'S E-PAPER READERS", value: todayEPaperReaders.toLocaleString(), change: "+15%", icon: BookOpen, color: "text-[#1e40af]", bg: "bg-blue-50" },
+    { title: "TOTAL NEWS VIEWS", value: totalNewsViews.toLocaleString(), change: "+20%", icon: FileText, color: "text-purple-600", bg: "bg-purple-50" },
+    { title: "TODAY'S NEWS VIEWS", value: todayNewsViews.toLocaleString(), change: "+10%", icon: FileText, color: "text-rose-600", bg: "bg-rose-50" },
+    { title: "TOTAL STATES", value: states.length, change: "Active", icon: MapPin, color: "text-cyan-600", bg: "bg-cyan-50" },
+    { title: "TOTAL SUB EDITIONS", value: subEditions.length, change: "Active", icon: Layers, color: "text-teal-600", bg: "bg-teal-50" },
+    { title: "TOTAL EDITIONS", value: editions.length, change: "Active", icon: Newspaper, color: "text-blue-700", bg: "bg-blue-50" },
+    { title: "PUBLISHED E-PAPERS", value: epapers.length, change: "Ready", icon: Newspaper, color: "text-emerald-600", bg: "bg-emerald-50" },
+    { title: "TOTAL NEWS", value: news.length, change: "Published", icon: FileText, color: "text-slate-700", bg: "bg-slate-100" },
+  ];
+
+  const pieColors = ['#1e40af', '#10b981', '#f59e0b', '#8b5cf6'];
+
+  const deviceData = [
+    { name: 'Mobile', value: initialVisitorAnalytics.deviceBreakdown.mobile },
+    { name: 'Desktop', value: initialVisitorAnalytics.deviceBreakdown.desktop },
+    { name: 'Tablet', value: initialVisitorAnalytics.deviceBreakdown.tablet },
+  ];
+
+  const trafficData = [
+    { name: 'Direct', value: initialVisitorAnalytics.trafficSources.direct },
+    { name: 'Search', value: initialVisitorAnalytics.trafficSources.search },
+    { name: 'Social', value: initialVisitorAnalytics.trafficSources.social },
+    { name: 'Referral', value: initialVisitorAnalytics.trafficSources.referral },
   ];
 
   return (
-    <div className="space-y-6">
-      {/* Top Welcome Header */}
-      <div className="bg-gradient-to-r from-slate-900 via-slate-800 to-red-950 rounded-2xl p-6 text-white shadow-xl flex flex-col md:flex-row md:items-center justify-between gap-4">
+    <div className="space-y-8 font-sans">
+      {/* Header Banner */}
+      <div className="bg-[#0b1d3a] text-white p-6 sm:p-8 rounded-2xl border-b-4 border-amber-500 shadow-lg flex flex-col sm:flex-row items-start sm:items-center justify-between gap-4">
         <div>
-          <div className="flex items-center gap-2 text-red-400 text-xs font-bold uppercase tracking-wider mb-1">
-            <Sparkles className="w-4 h-4" /> న్యూస్‌రూమ్ డాష్‌బోర్డ్
-          </div>
-          <h1 className="text-2xl font-bold font-telugu text-white">
-            స్వాగతం, {currentUser.name}!
-          </h1>
-          <p className="text-xs text-slate-300 mt-1 max-w-xl">
-            మీరు ప్రస్తుతం <span className="text-amber-400 font-bold">{currentRole}</span> హోదాలో ఉన్నారు. తాజా వార్తల వివరాలు, ట్రాఫిక్ గణాంకాలు మరియు వార్తా శీర్షికలను ఇక్కడ నిర్వహించండి.
+          <h1 className="text-2xl sm:text-3xl font-black font-serif text-white">Good Evening, Admin</h1>
+          <p className="text-xs sm:text-sm text-slate-300 mt-1">
+            Public Mood Digital E-Paper CMS &amp; Publishing Management Overview
           </p>
         </div>
 
-        <div className="flex flex-wrap items-center gap-2">
-          <Link
-            to="/admin/articles/new"
-            className="px-4 py-2.5 bg-red-600 hover:bg-red-500 text-white rounded-xl text-xs font-bold transition-all shadow-lg flex items-center gap-2 cursor-pointer"
-          >
-            <Plus className="w-4 h-4" />
-            <span>క్రొత్త వార్త రాయండి</span>
-          </Link>
-          <Link
-            to="/admin/notifications"
-            className="px-3 py-2.5 bg-slate-800 hover:bg-slate-700 text-white rounded-xl text-xs font-semibold border border-slate-700 flex items-center gap-1.5"
-          >
-            <Bell className="w-4 h-4 text-amber-400" />
-            <span>నోటిఫికేషన్ పంపు</span>
-          </Link>
+        <div className="bg-amber-500/20 text-amber-300 border border-amber-500/40 px-3.5 py-1.5 rounded-full text-xs font-bold flex items-center gap-1.5">
+          <Info className="w-4 h-4 text-amber-400" />
+          <span>DEMO ANALYTICS (Stored Locally)</span>
         </div>
       </div>
 
-      {/* Stats Grid */}
-      <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-4 gap-4">
-        {stats.map((stat, i) => {
-          const Icon = stat.icon;
+      {/* Top Statistic Cards Grid */}
+      <div className="grid grid-cols-2 sm:grid-cols-3 lg:grid-cols-4 xl:grid-cols-7 gap-4">
+        {statCards.map((card, i) => {
+          const IconComp = card.icon;
           return (
-            <div
-              key={i}
-              className="bg-white rounded-2xl p-5 border border-slate-200/80 shadow-xs flex items-center justify-between"
-            >
-              <div>
-                <p className="text-xs text-slate-500 font-medium mb-1">{stat.title}</p>
-                <h3 className="text-2xl font-black text-slate-900 tracking-tight">{stat.value}</h3>
-                <span
-                  className={`inline-flex items-center gap-1 text-[11px] font-bold mt-1 ${
-                    stat.isPositive ? 'text-emerald-600' : 'text-amber-600'
-                  }`}
-                >
-                  <TrendingUp className="w-3 h-3" /> {stat.change}
-                </span>
+            <div key={i} className="bg-white rounded-xl p-4 border border-slate-200 shadow-xs space-y-2 hover:shadow-md transition">
+              <div className="flex items-center justify-between text-[10px] font-bold text-slate-500 uppercase tracking-wider">
+                <span className="line-clamp-1">{card.title}</span>
+                <div className={`p-1.5 rounded-md ${card.bg}`}>
+                  <IconComp className={`w-3.5 h-3.5 ${card.color}`} />
+                </div>
               </div>
-              <div className={`w-12 h-12 rounded-xl ${stat.bgColor} flex items-center justify-center`}>
-                <Icon className={`w-6 h-6 ${stat.color}`} />
+              <div className="text-lg font-black text-slate-900 font-mono">
+                {card.value}
+              </div>
+              <div className="text-[10px] font-bold text-emerald-600 flex items-center gap-0.5">
+                <ArrowUpRight className="w-3 h-3" />
+                <span>{card.change}</span>
               </div>
             </div>
           );
         })}
       </div>
 
-      {/* Main Charts Section */}
-      <div className="grid grid-cols-1 lg:grid-cols-3 gap-6">
-        {/* Traffic Chart (2 cols) */}
-        <div className="lg:col-span-2 bg-white rounded-2xl p-6 border border-slate-200/80 shadow-xs space-y-4">
-          <div className="flex items-center justify-between">
-            <div>
-              <h3 className="text-base font-bold text-slate-900 font-telugu">లైవ్ ట్రాఫిక్ గణాంకాలు (Daily Views)</h3>
-              <p className="text-xs text-slate-500">గత 14 రోజుల పాఠకుల సందర్శన సంఖ్య</p>
-            </div>
-            <span className="text-xs bg-slate-100 px-3 py-1 rounded-lg text-slate-600 font-semibold border border-slate-200">
-              రియల్‌టైమ్ డేటా
-            </span>
+      {/* Analytics Overview Chart: Daily Visitors */}
+      <div className="bg-white rounded-xl p-6 border border-slate-200 shadow-sm space-y-4">
+        <div className="flex flex-col sm:flex-row items-start sm:items-center justify-between gap-4 border-b border-slate-100 pb-4">
+          <div>
+            <h2 className="text-lg font-bold font-serif text-[#0b1d3a]">Daily Visitors Overview</h2>
+            <p className="text-xs text-slate-500">Real-time daily reader traffic trend across website &amp; e-paper pages</p>
           </div>
 
-          <div className="h-64 w-full">
-            <ResponsiveContainer width="100%" height="100%">
-              <AreaChart data={MOCK_DAILY_TRAFFIC} margin={{ top: 10, right: 10, left: -20, bottom: 0 }}>
-                <defs>
-                  <linearGradient id="colorPv" x1="0" y1="0" x2="0" y2="1">
-                    <stop offset="5%" stopColor="#dc2626" stopOpacity={0.4} />
-                    <stop offset="95%" stopColor="#dc2626" stopOpacity={0.0} />
-                  </linearGradient>
-                </defs>
-                <CartesianGrid strokeDasharray="3 3" vertical={false} stroke="#f1f5f9" />
-                <XAxis dataKey="date" tick={{ fontSize: 11 }} stroke="#94a3b8" />
-                <YAxis tick={{ fontSize: 11 }} stroke="#94a3b8" />
-                <Tooltip
-                  contentStyle={{ backgroundColor: '#0f172a', borderRadius: '12px', color: '#fff', fontSize: '12px' }}
-                />
-                <Area type="monotone" dataKey="pageViews" name="పేజీ వీక్షణలు" stroke="#dc2626" strokeWidth={3} fillOpacity={1} fill="url(#colorPv)" />
-              </AreaChart>
-            </ResponsiveContainer>
+          <div className="flex items-center bg-slate-100 p-1 rounded-lg text-xs font-bold">
+            {(['today', '7days', '30days', 'all'] as const).map(t => (
+              <button
+                key={t}
+                onClick={() => setTimeRange(t)}
+                className={`px-3 py-1 rounded-md capitalize transition ${
+                  timeRange === t ? 'bg-[#1e40af] text-white shadow-xs' : 'text-slate-600 hover:text-slate-900'
+                }`}
+              >
+                {t === '7days' ? '7 Days' : t === '30days' ? '30 Days' : t}
+              </button>
+            ))}
           </div>
         </div>
 
-        {/* Category Views Bar Chart (1 col) */}
-        <div className="bg-white rounded-2xl p-6 border border-slate-200/80 shadow-xs space-y-4">
-          <div>
-            <h3 className="text-base font-bold text-slate-900 font-telugu">వర్గాల వారీగా రీడర్‌షిప్</h3>
-            <p className="text-xs text-slate-500">విభాగాల ప్రజాదరణ శాతాలు</p>
-          </div>
+        <div className="h-72 w-full pt-2">
+          <ResponsiveContainer width="100%" height="100%">
+            <AreaChart data={initialVisitorAnalytics.dailyVisitors}>
+              <defs>
+                <linearGradient id="visitorGradient" x1="0" y1="0" x2="0" y2="1">
+                  <stop offset="5%" stopColor="#1e40af" stopOpacity={0.4}/>
+                  <stop offset="95%" stopColor="#1e40af" stopOpacity={0}/>
+                </linearGradient>
+              </defs>
+              <CartesianGrid strokeDasharray="3 3" stroke="#f1f5f9" />
+              <XAxis dataKey="day" stroke="#64748b" fontSize={12} />
+              <YAxis stroke="#64748b" fontSize={12} />
+              <Tooltip
+                contentStyle={{ backgroundColor: '#0b1d3a', borderRadius: '8px', border: 'none', color: '#fff', fontSize: '12px' }}
+              />
+              <Area type="monotone" dataKey="visitors" stroke="#1e40af" strokeWidth={3} fillOpacity={1} fill="url(#visitorGradient)" />
+            </AreaChart>
+          </ResponsiveContainer>
+        </div>
+      </div>
 
-          <div className="h-64 w-full">
+      {/* Visitor Breakdown & Traffic Sources Grid */}
+      <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-6">
+        {/* Device Breakdown */}
+        <div className="bg-white rounded-xl p-6 border border-slate-200 shadow-sm space-y-4">
+          <h3 className="text-base font-bold font-serif text-[#0b1d3a]">Device Breakdown</h3>
+          <div className="h-48">
             <ResponsiveContainer width="100%" height="100%">
-              <BarChart data={MOCK_CATEGORY_METRICS.slice(0, 5)} layout="vertical" margin={{ top: 0, right: 10, left: 10, bottom: 0 }}>
-                <CartesianGrid strokeDasharray="3 3" horizontal={false} stroke="#f1f5f9" />
-                <XAxis type="number" tick={{ fontSize: 10 }} stroke="#94a3b8" />
-                <YAxis dataKey="categoryTe" type="category" tick={{ fontSize: 11 }} width={80} stroke="#475569" />
-                <Tooltip contentStyle={{ backgroundColor: '#0f172a', borderRadius: '8px', color: '#fff', fontSize: '12px' }} />
-                <Bar dataKey="percentage" name="శాతం (%)" fill="#2563eb" radius={[0, 6, 6, 0]} />
+              <RePieChart>
+                <Pie data={deviceData} innerRadius={50} outerRadius={70} paddingAngle={5} dataKey="value">
+                  {deviceData.map((_, index) => (
+                    <Cell key={`cell-${index}`} fill={pieColors[index % pieColors.length]} />
+                  ))}
+                </Pie>
+                <Tooltip />
+              </RePieChart>
+            </ResponsiveContainer>
+          </div>
+          <div className="grid grid-cols-3 gap-2 text-center text-xs font-bold pt-2 border-t border-slate-100">
+            <div>
+              <span className="text-blue-700 block">Mobile</span>
+              <span className="text-slate-900">{initialVisitorAnalytics.deviceBreakdown.mobile}%</span>
+            </div>
+            <div>
+              <span className="text-emerald-600 block">Desktop</span>
+              <span className="text-slate-900">{initialVisitorAnalytics.deviceBreakdown.desktop}%</span>
+            </div>
+            <div>
+              <span className="text-amber-500 block">Tablet</span>
+              <span className="text-slate-900">{initialVisitorAnalytics.deviceBreakdown.tablet}%</span>
+            </div>
+          </div>
+        </div>
+
+        {/* Traffic Sources */}
+        <div className="bg-white rounded-xl p-6 border border-slate-200 shadow-sm space-y-4">
+          <h3 className="text-base font-bold font-serif text-[#0b1d3a]">Traffic Sources</h3>
+          <div className="h-48">
+            <ResponsiveContainer width="100%" height="100%">
+              <BarChart data={trafficData}>
+                <CartesianGrid strokeDasharray="3 3" stroke="#f1f5f9" />
+                <XAxis dataKey="name" stroke="#64748b" fontSize={11} />
+                <YAxis stroke="#64748b" fontSize={11} />
+                <Tooltip />
+                <Bar dataKey="value" fill="#d97706" radius={[4, 4, 0, 0]} />
               </BarChart>
             </ResponsiveContainer>
           </div>
-        </div>
-      </div>
-
-      {/* Breaking News Toggle & Action Toolbar */}
-      <div className="bg-amber-50 border border-amber-200 rounded-2xl p-4 flex flex-col sm:flex-row items-center justify-between gap-4">
-        <div className="flex items-center gap-3">
-          <div className="w-10 h-10 rounded-xl bg-amber-500 text-white flex items-center justify-center shrink-0">
-            <Flame className="w-5 h-5 animate-pulse" />
-          </div>
-          <div>
-            <h4 className="text-sm font-bold text-slate-900 font-telugu">బ్రేకింగ్ న్యూస్ బ్యానర్ స్థితి</h4>
-            <p className="text-xs text-slate-600">హోమ్‌పేజీ మరియు వార్తా పేజీలలో పైభాగంలో లైవ్ టిక్కర్ డిస్‌ప్లే</p>
+          <div className="text-center text-xs font-bold text-slate-500 pt-2 border-t border-slate-100">
+            Direct (48%) &amp; Search (28%) remain top reader gateways
           </div>
         </div>
 
-        <div className="flex items-center gap-3">
-          <span className={`text-xs font-bold px-3 py-1 rounded-full ${breakingNewsActive ? 'bg-emerald-100 text-emerald-800' : 'bg-slate-200 text-slate-700'}`}>
-            {breakingNewsActive ? 'ప్రస్తుతం రన్ అవుతోంది (LIVE)' : 'ఆఫ్‌లైన్‌లో ఉంది'}
-          </span>
-          <button
-            onClick={() => setBreakingNewsActive(!breakingNewsActive)}
-            className={`px-4 py-2 rounded-xl text-xs font-bold transition-all cursor-pointer ${
-              breakingNewsActive ? 'bg-red-600 hover:bg-red-700 text-white' : 'bg-emerald-600 hover:bg-emerald-700 text-white'
-            }`}
-          >
-            {breakingNewsActive ? 'టిక్కర్ ఆపివేయి' : 'టిక్కర్ ప్రారంభించు'}
-          </button>
-        </div>
-      </div>
-
-      {/* Recent Articles & Citizen News Tips Grid */}
-      <div className="grid grid-cols-1 lg:grid-cols-3 gap-6">
-        {/* Recent Articles Table (2 cols) */}
-        <div className="lg:col-span-2 bg-white rounded-2xl p-6 border border-slate-200/80 shadow-xs space-y-4">
+        {/* DEMO LIVE ACTIVITY */}
+        <div className="bg-white rounded-xl p-6 border border-slate-200 shadow-sm space-y-4">
           <div className="flex items-center justify-between">
-            <div>
-              <h3 className="text-base font-bold text-slate-900 font-telugu">ఇటీవలి వార్తా వ్యాసాలు</h3>
-              <p className="text-xs text-slate-500">న్యూస్‌రూమ్‌లో చివరిగా అప్‌డేట్ చేసిన కథనాలు</p>
-            </div>
-            <Link to="/admin/articles" className="text-xs text-red-600 hover:underline font-bold flex items-center gap-1">
-              అన్నీ చూడండి <ArrowUpRight className="w-3.5 h-3.5" />
-            </Link>
+            <h3 className="text-base font-bold font-serif text-[#0b1d3a]">Demo Live Activity</h3>
+            <span className="bg-emerald-100 text-emerald-800 text-[10px] font-extrabold px-2 py-0.5 rounded">
+              DEMO SIMULATION
+            </span>
           </div>
 
-          <div className="overflow-x-auto">
-            <table className="w-full text-left text-xs text-slate-600">
-              <thead className="bg-slate-50 text-slate-700 font-bold uppercase text-[10px] border-b border-slate-200">
-                <tr>
-                  <th className="py-3 px-3">వార్త శీర్షిక</th>
-                  <th className="py-3 px-2">వర్గం</th>
-                  <th className="py-3 px-2">రచయిత</th>
-                  <th className="py-3 px-2">స్థితి</th>
-                  <th className="py-3 px-2 text-right">చర్యలు</th>
-                </tr>
-              </thead>
-              <tbody className="divide-y divide-slate-100">
-                {articlesList.map((art) => (
-                  <tr key={art.id} className="hover:bg-slate-50/80 transition-colors">
-                    <td className="py-3 px-3 max-w-xs">
-                      <p className="font-bold text-slate-900 font-telugu truncate">{art.titleTe || art.title}</p>
-                      <span className="text-[10px] text-slate-400">{art.publishedAt}</span>
-                    </td>
-                    <td className="py-3 px-2">
-                      <span className="bg-slate-100 text-slate-700 px-2 py-0.5 rounded text-[10px] font-semibold">
-                        {art.category}
-                      </span>
-                    </td>
-                    <td className="py-3 px-2 font-medium text-slate-700">{art.authorName}</td>
-                    <td className="py-3 px-2">
-                      <span className="inline-flex items-center gap-1 bg-emerald-50 text-emerald-700 border border-emerald-200 px-2 py-0.5 rounded-full text-[10px] font-bold">
-                        <CheckCircle className="w-3 h-3" /> ప్రచురితం
-                      </span>
-                    </td>
-                    <td className="py-3 px-2 text-right">
-                      <Link
-                        to={`/admin/articles/edit/${art.id}`}
-                        className="text-xs text-blue-600 font-bold hover:underline px-2 py-1 bg-blue-50 rounded"
-                      >
-                        ఎడిట్
-                      </Link>
-                    </td>
-                  </tr>
-                ))}
-              </tbody>
-            </table>
-          </div>
-        </div>
-
-        {/* Citizen Tips Sidebar (1 col) */}
-        <div className="bg-white rounded-2xl p-6 border border-slate-200/80 shadow-xs space-y-4">
-          <div className="flex items-center justify-between">
-            <div>
-              <h3 className="text-base font-bold text-slate-900 font-telugu">ప్రజా ఫిర్యాదులు (News Tips)</h3>
-              <p className="text-xs text-slate-500">సిటిజన్ రిపోర్టర్ల నుండి వచ్చిన వార్తలు</p>
-            </div>
-            <Link to="/admin/news-tips" className="text-xs text-red-600 font-bold hover:underline">
-              అన్నీ ({MOCK_NEWS_TIPS.length})
-            </Link>
-          </div>
-
-          <div className="space-y-3">
-            {MOCK_NEWS_TIPS.slice(0, 4).map((tip) => (
-              <div key={tip.id} className="p-3 bg-slate-50 border border-slate-200 rounded-xl space-y-1.5">
-                <div className="flex items-center justify-between">
-                  <span className="text-[10px] bg-red-100 text-red-700 font-bold px-2 py-0.5 rounded">
-                    {tip.district}
-                  </span>
-                  <span className="text-[10px] text-slate-400">{tip.submittedAt}</span>
+          <div className="space-y-3 max-h-56 overflow-y-auto">
+            {initialLiveActivity.map(act => (
+              <div key={act.id} className="p-2.5 bg-slate-50 rounded-lg border border-slate-100 text-xs space-y-1">
+                <div className="flex items-center justify-between font-bold text-slate-900">
+                  <span>{act.userText}</span>
+                  <span className="text-[10px] text-slate-400">{act.timeAgo}</span>
                 </div>
-                <h5 className="text-xs font-bold text-slate-900 font-telugu line-clamp-1">{tip.issueType} ఫిర్యాదు</h5>
-                <p className="text-[11px] text-slate-600 line-clamp-2">{tip.description}</p>
-                <div className="pt-1 flex items-center justify-between border-t border-slate-200 text-[10px] text-slate-500">
-                  <span>పంపినవారు: {tip.name}</span>
-                  <Link to="/admin/news-tips" className="text-red-600 font-bold hover:underline">
-                    పరిశీలించు →
-                  </Link>
-                </div>
+                <div className="text-slate-600 text-[11px]">{act.action}</div>
               </div>
             ))}
           </div>

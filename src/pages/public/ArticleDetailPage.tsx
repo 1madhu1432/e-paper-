@@ -22,7 +22,6 @@ import {
 } from 'lucide-react';
 import { useSavedArticles } from '../../context/SavedArticlesContext';
 import { useUserPreferences, FontSizeOption } from '../../context/UserPreferencesContext';
-import { AdBanner } from '../../components/common/AdBanner';
 import { ArticleCard } from '../../components/public/ArticleCard';
 import { TrendingSidebar } from '../../components/public/TrendingSidebar';
 
@@ -168,11 +167,6 @@ export const ArticleDetailPage: React.FC = () => {
         <span className="text-slate-800 font-medium truncate max-w-xs">{article.titleTe}</span>
       </div>
 
-      {/* Top Sponsor Ad Banner */}
-      <div className="mb-6 no-print">
-        <AdBanner placement="article-top" />
-      </div>
-
       <div className="grid grid-cols-1 lg:grid-cols-12 gap-8">
         {/* Main Article Content (8 cols) */}
         <div className="lg:col-span-8 bg-white rounded-2xl p-5 sm:p-8 border border-slate-200/80 shadow-xs">
@@ -306,11 +300,6 @@ export const ArticleDetailPage: React.FC = () => {
               </p>
             ))}
 
-            {/* Mid Article Sponsor Ad Placement */}
-            <div className="py-6 no-print">
-              <AdBanner placement="article-middle" />
-            </div>
-
             <p className="text-justify font-normal">
               ప్రజల గొంతుకగా పబ్లిక్ మూడ్ ఎల్లప్పుడూ క్షేత్రస్థాయి పరిశీలన జరిపి ప్రజాసమస్యలను ప్రభుత్వం దృష్టికి తెస్తుంది. ప్రజాప్రతినిధులు మరియు అధికారులు ఈ అంశంపై మరింత బాధ్యతాయుతంగా స్పందించాలని ఆశిస్తున్నాం.
             </p>
@@ -421,11 +410,6 @@ export const ArticleDetailPage: React.FC = () => {
             )}
           </div>
 
-          {/* Bottom Article Sponsor Ad */}
-          <div className="my-8 no-print">
-            <AdBanner placement="article-bottom" />
-          </div>
-
           {/* Comments Section */}
           <section className="mt-10 pt-8 border-t border-slate-200 no-print">
             <div className="flex items-center gap-2 mb-6">
@@ -487,7 +471,6 @@ export const ArticleDetailPage: React.FC = () => {
         {/* Sidebar: Trending + Related News */}
         <aside className="lg:col-span-4 space-y-6 no-print">
           <TrendingSidebar articles={trendingArticles} />
-          <AdBanner placement="sidebar" />
 
           {/* Related News in Category */}
           <div className="bg-white rounded-2xl border border-slate-200/80 p-5 shadow-xs">

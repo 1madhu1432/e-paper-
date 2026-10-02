@@ -93,3 +93,17 @@
   -webkit-box-orient: vertical;
   overflow: hidden;
 }
+
+/* Disable Copying & Text Selection for Read-Only Newspaper Portal */
+.no-copy {
+  -webkit-user-select: none !important;
+  -moz-user-select: none !important;
+  -ms-user-select: none !important;
+  user-select: none !important;
+}
+
+.no-copy img {
+  pointer-events: none !important;
+  -webkit-user-drag: none !important;
+}
+

@@ -1,209 +1,108 @@
-import React, { useState, useEffect } from 'react';
-import {
-  FileText,
-  Plus,
-  Calendar,
-  Download,
-  Eye,
-  Trash2,
-  ExternalLink,
-  Upload,
-  CheckCircle,
-  X,
-} from 'lucide-react';
-import { MockEPaperService } from '../../services/mockEPaperService';
-import { EPaper } from '../../types';
+import React from 'react';
+import { Link, useNavigate } from 'react-router-dom';
+import { useData } from '../../context/DataContext';
+import { Newspaper, Plus, Eye, Download, Share2, Trash2, Edit, CheckCircle, Clock, Archive } from 'lucide-react';
 
 export const AdminEPaperPage: React.FC = () => {
-  const [editions, setEditions] = useState<EPaper[]>(() => MockEPaperService.getAll());
-  const [showUploadModal, setShowUploadModal] = useState(false);
-
-  useEffect(() => {
-    document.body.style.overflow = showUploadModal ? 'hidden' : '';
-    return () => { document.body.style.overflow = ''; };
-  }, [showUploadModal]);
-
-  // Upload Form state
-  const [editionName, setEditionName] = useState('');
-  const [editionNameTe, setEditionNameTe] = useState('');
-  const [date, setDate] = useState(new Date().toISOString().split('T')[0]);
-  const [pagesCount, setPagesCount] = useState(16);
-
-  const refreshEditions = () => setEditions(MockEPaperService.getAll());
-
-  useEffect(() => {
-    window.addEventListener('epaper-updated', refreshEditions);
-    return () => window.removeEventListener('epaper-updated', refreshEditions);
-  }, []);
-
-  const handleDelete = (id: string) => {
-    if (window.confirm('ఈ ఈ-పేపర్ ఎడిషన్‌ను తొలిగించాలనుకుంటున్నారా?')) {
-      MockEPaperService.delete(id);
-      refreshEditions();
-    }
-  };
-
-  const handleUpload = (e: React.FormEvent) => {
-    e.preventDefault();
-    if (!editionNameTe) return;
-
-    MockEPaperService.create({
-      editionName: editionName || 'Main Edition',
-      editionNameTe,
-      date,
-      district: 'Hyderabad',
-      totalPages: Number(pagesCount),
-      status: 'published',
-    });
-
-    setEditionNameTe('');
-    setEditionName('');
-    setShowUploadModal(false);
-    refreshEditions();
-  };
+  const navigate = useNavigate();
+  const { epapers, updateEPaper, deleteEPaper } = useData();
 
   return (
-    <div className="space-y-6">
-      {/* Header */}
-      <div className="flex flex-col sm:flex-row sm:items-center justify-between gap-4 bg-white p-6 rounded-2xl border border-slate-200/80 shadow-xs">
+    <div className="space-y-6 font-sans">
+      <div className="flex flex-col sm:flex-row items-start sm:items-center justify-between gap-4 bg-white p-6 rounded-xl border border-slate-200 shadow-xs">
         <div>
-          <h1 className="text-xl font-bold font-telugu text-slate-900 flex items-center gap-2">
-            <FileText className="w-6 h-6 text-red-600" />
-            డిజిటల్ ఈ-పేపర్ మేనేజ్‌మెంట్ (E-Paper Manager)
-          </h1>
-          <p className="text-xs text-slate-500 mt-1">
-            దినపత్రిక ఈ-పేపర్ పిడిఎఫ్ ఎడిషన్ల అప్‌లోడ్ మరియు కటింగ్ క్లిప్పింగ్‌లు
-          </p>
+          <h1 className="text-2xl font-black font-serif text-[#0b1d3a]">E-Paper Management</h1>
+          <p className="text-xs text-slate-500">Manage published digital e-papers, drafts, and archives</p>
         </div>
 
-        <button
-          onClick={() => setShowUploadModal(true)}
-          className="px-4 py-2.5 bg-red-600 hover:bg-red-500 text-white rounded-xl text-xs font-bold transition-all shadow-md flex items-center justify-center gap-2 cursor-pointer shrink-0"
+        <Link
+          to="/admin/epapers/create"
+          className="bg-amber-500 hover:bg-amber-400 text-slate-950 font-extrabold px-4 py-2.5 rounded-lg text-xs transition flex items-center gap-2 shadow-md"
         >
-          <Upload className="w-4 h-4" />
-          <span>నూతన ఈ-పేపర్ ఎడిషన్ అప్‌లోడ్</span>
-        </button>
+          <Plus className="w-4 h-4" />
+          <span>Upload New E-Paper</span>
+        </Link>
       </div>
 
-      {/* Editions Grid */}
-      <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 gap-6">
-        {editions.map((ed) => (
-          <div key={ed.id} className="bg-white rounded-2xl border border-slate-200/80 shadow-xs overflow-hidden flex flex-col justify-between">
-            <div>
-              <div className="relative h-48 bg-slate-950 overflow-hidden">
-                <img src={ed.coverImage} alt={ed.editionNameTe} className="w-full h-full object-cover opacity-90" />
-                <div className="absolute inset-0 bg-gradient-to-t from-slate-950/80 to-transparent" />
-                <div className="absolute bottom-3 left-3 right-3 flex items-center justify-between text-white">
-                  <span className="text-xs font-bold bg-red-600 px-2.5 py-0.5 rounded-full font-telugu">
-                    {ed.editionNameTe}
-                  </span>
-                  <span className="text-xs text-slate-300 font-mono">{ed.date}</span>
-                </div>
-              </div>
-
-              <div className="p-4 space-y-2">
-                <h3 className="font-bold text-slate-900 font-telugu text-sm">{ed.editionNameTe} డిజిటల్ ఎడిషన్</h3>
-                <p className="text-xs text-slate-500 flex items-center gap-2">
-                  <span>మొత్తం పేజీలు: {ed.totalPages}</span>
-                  <span>•</span>
-                  <span className="text-emerald-600 font-bold">PDF సిద్దంగా ఉంది</span>
-                </p>
-              </div>
-            </div>
-
-            <div className="p-4 border-t border-slate-100 bg-slate-50/50 flex items-center justify-between gap-2">
-              <a
-                href={`/epaper/${ed.id}`}
-                target="_blank"
-                rel="noopener noreferrer"
-                className="px-3 py-1.5 bg-slate-900 hover:bg-slate-800 text-white rounded-lg text-xs font-bold flex items-center gap-1"
-              >
-                <Eye className="w-3.5 h-3.5" />
-                <span>వీక్షించండి</span>
-              </a>
-
-              <button
-                onClick={() => handleDelete(ed.id)}
-                className="p-1.5 text-slate-400 hover:text-red-600 rounded-lg transition-colors cursor-pointer"
-              >
-                <Trash2 className="w-4 h-4" />
-              </button>
-            </div>
-          </div>
-        ))}
-      </div>
-
-      {/* Upload Modal */}
-      {showUploadModal && (
-        <div className="fixed inset-0 z-50 bg-black/60 backdrop-blur-xs flex items-center justify-center p-4">
-          <div className="bg-white rounded-2xl max-w-md w-full p-6 shadow-2xl space-y-4">
-            <div className="flex items-center justify-between border-b pb-3">
-              <h3 className="text-base font-bold font-telugu text-slate-900">కొత్త ఈ-పేపర్ అప్‌లోడ్</h3>
-              <button onClick={() => setShowUploadModal(false)} className="p-1 text-slate-400 hover:text-slate-600">
-                <X className="w-5 h-5" />
-              </button>
-            </div>
-
-            <form onSubmit={handleUpload} className="space-y-4">
-              <div>
-                <label className="block text-xs font-bold text-slate-700 mb-1">ఎడిషన్ పేరు (తెలుగు)</label>
-                <input
-                  type="text"
-                  required
-                  value={editionNameTe}
-                  onChange={(e) => setEditionNameTe(e.target.value)}
-                  placeholder="ఉదా: హైదరాబాద్ ప్రధాన ఎడిషన్"
-                  className="w-full px-3 py-2 bg-slate-50 border border-slate-200 rounded-xl text-xs focus:outline-none focus:border-red-500"
-                />
-              </div>
-
-              <div>
-                <label className="block text-xs font-bold text-slate-700 mb-1">ప్రచురణ తేదీ</label>
-                <input
-                  type="date"
-                  required
-                  value={date}
-                  onChange={(e) => setDate(e.target.value)}
-                  className="w-full px-3 py-2 bg-slate-50 border border-slate-200 rounded-xl text-xs focus:outline-none focus:border-red-500"
-                />
-              </div>
-
-              <div>
-                <label className="block text-xs font-bold text-slate-700 mb-1">మొత్తం పేజీల సంఖ్య</label>
-                <input
-                  type="number"
-                  required
-                  value={pagesCount}
-                  onChange={(e) => setPagesCount(Number(e.target.value))}
-                  className="w-full px-3 py-2 bg-slate-50 border border-slate-200 rounded-xl text-xs focus:outline-none focus:border-red-500"
-                />
-              </div>
-
-              <div className="border-2 border-dashed border-slate-300 rounded-xl p-4 text-center cursor-pointer hover:bg-slate-50">
-                <Upload className="w-8 h-8 mx-auto text-slate-400 mb-1" />
-                <p className="text-xs font-bold text-slate-700">PDF ఫైల్‌ను ఇక్కడ డ్రాప్ చేయండి</p>
-                <p className="text-[10px] text-slate-400">లేదా బ్రౌజ్ చేయడానికి క్లిక్ చేయండి (Max 50MB)</p>
-              </div>
-
-              <div className="pt-3 border-t flex items-center justify-end gap-2">
-                <button
-                  type="button"
-                  onClick={() => setShowUploadModal(false)}
-                  className="px-4 py-2 bg-slate-100 text-slate-600 rounded-xl text-xs font-semibold"
-                >
-                  రద్దు చేయి
-                </button>
-                <button
-                  type="submit"
-                  className="px-4 py-2 bg-red-600 text-white rounded-xl text-xs font-bold shadow-md hover:bg-red-500"
-                >
-                  అప్‌లోడ్ చేయి
-                </button>
-              </div>
-            </form>
-          </div>
+      {/* E-Papers Table */}
+      <div className="bg-white rounded-xl border border-slate-200 overflow-hidden shadow-xs">
+        <div className="overflow-x-auto">
+          <table className="w-full text-left border-collapse text-xs">
+            <thead>
+              <tr className="bg-slate-50 border-b border-slate-200 text-slate-600 font-bold uppercase">
+                <th className="p-4">Publication Date</th>
+                <th className="p-4">Edition Details</th>
+                <th className="p-4">State &amp; District</th>
+                <th className="p-4">Pages</th>
+                <th className="p-4">Readers &amp; Views</th>
+                <th className="p-4">Status</th>
+                <th className="p-4 text-right">Actions</th>
+              </tr>
+            </thead>
+            <tbody className="divide-y divide-slate-100 font-medium">
+              {epapers.map(ep => (
+                <tr key={ep.id} className="hover:bg-slate-50/80 transition">
+                  <td className="p-4 font-bold text-slate-900 font-mono">
+                    {ep.date}
+                  </td>
+                  <td className="p-4 font-bold text-slate-900 flex items-center gap-3">
+                    <img src={ep.coverImage} alt={ep.title} className="w-10 h-14 rounded object-cover border" />
+                    <div>
+                      <span className="block font-serif text-sm font-extrabold text-[#0b1d3a]">{ep.editionName}</span>
+                      <span className="text-[10px] text-slate-400">{ep.volume} • {ep.issue}</span>
+                    </div>
+                  </td>
+                  <td className="p-4">
+                    <span className="block font-bold text-blue-700">{ep.stateName}</span>
+                    <span className="text-[10px] text-slate-500">{ep.subEditionName}</span>
+                  </td>
+                  <td className="p-4 font-bold text-slate-800">{ep.totalPages} Pages</td>
+                  <td className="p-4 space-y-0.5 text-[11px]">
+                    <div className="text-slate-900 font-bold">{(ep.readers || 0).toLocaleString()} Readers</div>
+                    <div className="text-slate-500">{ep.views.toLocaleString()} Pageviews</div>
+                  </td>
+                  <td className="p-4">
+                    <button
+                      onClick={() => updateEPaper(ep.id, {
+                        status: ep.status === 'published' ? 'draft' : 'published'
+                      })}
+                      className={`inline-flex items-center gap-1 px-2.5 py-1 rounded-full font-bold text-[10px] uppercase ${
+                        ep.status === 'published' ? 'bg-emerald-100 text-emerald-800' : 'bg-amber-100 text-amber-800'
+                      }`}
+                    >
+                      {ep.status === 'published' ? <CheckCircle className="w-3 h-3 text-emerald-600" /> : <Clock className="w-3 h-3 text-amber-600" />}
+                      <span>{ep.status}</span>
+                    </button>
+                  </td>
+                  <td className="p-4 text-right space-x-1.5">
+                    <Link
+                      to={`/epaper/reader/${ep.id}`}
+                      className="p-1.5 inline-block text-blue-600 hover:bg-blue-50 rounded transition"
+                      title="View Reader"
+                    >
+                      <Eye className="w-4 h-4" />
+                    </Link>
+                    <button
+                      onClick={() => updateEPaper(ep.id, { status: 'archived' })}
+                      className="p-1.5 text-slate-600 hover:bg-slate-100 rounded transition"
+                      title="Archive E-Paper"
+                    >
+                      <Archive className="w-4 h-4" />
+                    </button>
+                    <button
+                      onClick={() => deleteEPaper(ep.id)}
+                      className="p-1.5 text-red-600 hover:bg-red-50 rounded transition"
+                      title="Delete E-Paper"
+                    >
+                      <Trash2 className="w-4 h-4" />
+                    </button>
+                  </td>
+                </tr>
+              ))}
+            </tbody>
+          </table>
         </div>
-      )}
+      </div>
     </div>
   );
 };
