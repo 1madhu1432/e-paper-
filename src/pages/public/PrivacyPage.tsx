@@ -17,13 +17,13 @@ export const PrivacyPage: React.FC = () => {
         <Shield className="w-12 h-12 text-red-400 shrink-0" />
         <div>
           <h1 className="text-3xl font-black font-telugu">గోప్యతా విధానం</h1>
-          <p className="text-slate-300 text-sm mt-1 font-sans">Privacy Policy — జనతా వాణి డిజిటల్ మీడియా</p>
+          <p className="text-slate-300 text-sm mt-1 font-sans">Privacy Policy — పబ్లిక్ మూడ్ డిజిటల్ మీడియా</p>
         </div>
       </div>
 
       <div className="bg-white rounded-2xl border border-slate-200/80 shadow-xs p-6 sm:p-8 space-y-8 text-slate-700 text-sm leading-relaxed">
         <p className="text-slate-600 font-telugu">
-          జనతా వాణి డిజిటల్ మీడియా మీ వ్యక్తిగత సమాచారాన్ని రక్షించడానికి కట్టుబడి ఉంది. ఈ గోప్యతా విధానం మీరు మా వెబ్‌సైట్‌ను ఉపయోగించినప్పుడు మేము ఏ విధంగా సమాచారాన్ని సేకరిస్తాం, ఉపయోగిస్తాం మరియు రక్షిస్తాం అనే దానిని వివరిస్తుంది.
+          పబ్లిక్ మూడ్ డిజిటల్ మీడియా మీ వ్యక్తిగత సమాచారాన్ని రక్షించడానికి కట్టుబడి ఉంది. ఈ గోప్యతా విధానం మీరు మా వెబ్‌సైట్‌ను ఉపయోగించినప్పుడు మేము ఏ విధంగా సమాచారాన్ని సేకరిస్తాం, ఉపయోగిస్తాం మరియు రక్షిస్తాం అనే దానిని వివరిస్తుంది.
         </p>
 
         <section>
@@ -92,14 +92,14 @@ export const PrivacyPage: React.FC = () => {
           </h2>
           <p className="text-slate-600 font-telugu">
             గోప్యతా విధానానికి సంబంధించిన ప్రశ్నల కోసం:{' '}
-            <a href="mailto:privacy@janathavaani.com" className="text-red-600 hover:underline">
-              privacy@janathavaani.com
+            <a href="mailto:privacy@publicmood.com" className="text-red-600 hover:underline">
+              privacy@publicmood.com
             </a>
           </p>
         </section>
 
         <div className="pt-4 border-t border-slate-100 text-xs text-slate-400 text-right font-telugu">
-          చివరి నవీకరణ: అక్టోబర్ 2025 | జనతా వాణి డిజిటల్ మీడియా
+          చివరి నవీకరణ: అక్టోబర్ 2026 | పబ్లిక్ మూడ్ డిజిటల్ మీడియా
         </div>
       </div>
 

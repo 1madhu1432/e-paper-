@@ -48,7 +48,7 @@ export class MockAIService {
 
     switch (task) {
       case 'generate-headline':
-        return `🌟 జనతా వాణి AI రూపొందించిన 5 ఆకర్షణీయమైన హెడ్‌లైన్స్:
+        return `🌟 పబ్లిక్ మూడ్ AI రూపొందించిన 5 ఆకర్షణీయమైన హెడ్‌లైన్స్:
 
 1. [బ్రేకింగ్]: ${sampleTopic} - ప్రభుత్వ తాజా మార్గదర్శకాలు విడుదల!
 2. [విశ్లేషణ]: అసలు ఏం జరిగింది? ${sampleTopic} వెనుక ఉన్న వాస్తవాలు ఇవే!
@@ -70,10 +70,10 @@ export class MockAIService {
       case 'seo-meta':
         return `🎯 SEO ఆప్టిమైజేషన్ మెటా డేటా:
 
-Meta Title: ${sampleTopic} | తాజా వార్తలు - Janatha Vaani
-Meta Description: ${sampleTopic} సమగ్ర సమాచారం, కీలక మార్గదర్శకాలు మరియు తాజా విశ్లేషణ జనతా వాణి డిజిటల్ నెట్‌వర్క్‌లో చదవండి.
-Keywords: తెలుగు వార్తలు, తాజా సమాచారం, ఆంధ్రప్రదేశ్, తెలంగాణ, Janatha Vaani, ${sampleTopic.split(' ').slice(0, 3).join(', ')}
-Canonical URL: https://janathavaani.com/news/${Date.now()}
+Meta Title: ${sampleTopic} | తాజా వార్తలు - Public Mood
+Meta Description: ${sampleTopic} సమగ్ర సమాచారం, కీలక మార్గదర్శకాలు మరియు తాజా విశ్లేషణ పబ్లిక్ మూడ్ డిజిటల్ నెట్‌వర్క్‌లో చదవండి.
+Keywords: తెలుగు వార్తలు, తాజా సమాచారం, ఆంధ్రప్రదేశ్, తెలంగాణ, Public Mood, పబ్లిక్ మూడ్, ${sampleTopic.split(' ').slice(0, 3).join(', ')}
+Canonical URL: https://publicmood.com/news/${Date.now()}
 SEO Score: 96/100 (Excellent)`;
 
       case 'te-to-en':
@@ -90,11 +90,11 @@ SEO Score: 96/100 (Excellent)`;
 ${sampleTopic} గురించి మీరు తెలుసుకోవాల్సిన ముఖ్యమైన విషయాలు ఇక్కడ ఉన్నాయి! 👇
 
 స్వైప్ చేసి పూర్తి కథనాన్ని చదవండి ➡️
-మరిన్ని తాజా తెలుగు వార్తల కోసం @JanathaVaani ని ఇప్పుడే ఫాలో అవ్వండి! 📲
+మరిన్ని తాజా తెలుగు వార్తల కోసం @PublicMood ని ఇప్పుడే ఫాలో అవ్వండి! 📲
 
 .
 .
-#JanathaVaani #TeluguNews #BreakingNewsTelugu #AndhraPradesh #Telangana #HyderabadNews #LatestUpdates`;
+#PublicMood #TeluguNews #BreakingNewsTelugu #AndhraPradesh #Telangana #HyderabadNews #LatestUpdates`;
 
       case 'facebook-post':
         return `📢 [ముఖ్యాంశం]: ${sampleTopic}
@@ -102,42 +102,42 @@ ${sampleTopic} గురించి మీరు తెలుసుకోవా
 ఈ నిర్ణయంపై మీ అభిప్రాయం ఏమిటి? ప్రభుత్వం తీసుకున్న ఈ చర్య సాధారణ ప్రజలకు ఎంతవరకు ఉపయోగపడుతుంది? మీ ఆలోచనలను కింద కామెంట్ సెక్షన్‌లో పంచుకోండి! 👇
 
 పూర్తి వార్త కథనం కోసం బయోలోని లింక్ క్లిక్ చేయండి.
-#JanathaVaani #TeluguSamacharam #PublicVoice`;
+#PublicMood #TeluguSamacharam #PublicMoodNews`;
 
       case 'x-post':
         return `🔴 #BREAKING: ${sampleTopic.slice(0, 140)}
 
-అధికారిక ప్రకటన వెలువడింది. పూర్తి వివరాలు, లైవ్ అప్‌డేట్స్ కోసం క్లిక్ చేయండి 🔗 https://janathavaani.com/latest
+అధికారిక ప్రకటన వెలువడింది. పూర్తి వివరాలు, లైవ్ అప్‌డేట్స్ కోసం క్లిక్ చేయండి 🔗 https://publicmood.com/latest
 
-#JanathaVaani #TeluguNews #Telangana #AndhraPradesh`;
+#PublicMood #TeluguNews #Telangana #AndhraPradesh`;
 
       case 'whatsapp-share':
-        return `*🔴 జనతా వాణి బ్రేకింగ్ న్యూస్ అలర్ట్*
+        return `*🔴 పబ్లిక్ మూడ్ బ్రేకింగ్ న్యూస్ అలర్ట్*
 ━━━━━━━━━━━━━━━━━━━━
 *${sampleTopic}*
 
 📌 *ప్రధాన అంశాలు:*
 • సంబంధిత శాఖల నుంచి అధికారిక ఉత్తర్వులు జారీ
 • పూర్తి సమాచారం కోసం క్రింది లింక్ క్లిక్ చేసి చదవండి:
-👉 https://janathavaani.com/article/today
+👉 https://publicmood.com/article/today
 
 _విశ్వసనీయ వార్తల కోసం మీ వాట్సాప్ గ్రూపులలో షేర్ చేయండి!_
-*జనతా వాణి - ప్రజా పక్షం*`;
+*పబ్లిక్ మూడ్ - ప్రజా పక్షం*`;
 
       case 'youtube-desc':
         return `📺 YOUTUBE VIDEO METADATA:
 
-Title: ${sampleTopic} | Janatha Vaani Ground Report & Live Updates
+Title: ${sampleTopic} | Public Mood Ground Report & Live Updates
 Description:
-తెలుగు రాష్ట్రాల సమగ్ర వార్తా విశ్లేషణ - జనతా వాణి ప్రత్యేక బులెటిన్.
+తెలుగు రాష్ట్రాల సమగ్ర వార్తా విశ్లేషణ - పబ్లిక్ మూడ్ ప్రత్యేక బులెటిన్.
 ఈ వీడియోలో:
 00:00 - పరిచయం & ముఖ్యాంశాలు
 02:15 - క్షేత్రస్థాయి విశ్లేషణ
 05:30 - అధికారుల స్పందన
 08:45 - ప్రజల అభిప్రాయాలు
 
-🔔 సబ్‌స్క్రైబ్ చేయండి: https://youtube.com/@JanathaVaani
-Official Website: https://janathavaani.com`;
+🔔 సబ్‌స్క్రైబ్ చేయండి: https://youtube.com/@PublicMoodNews
+Official Website: https://publicmood.com`;
 
       case 'reel-script':
         return `🎬 60-సెకన్ల రీల్ / షార్ట్స్ స్క్రిప్ట్:
@@ -152,7 +152,7 @@ Official Website: https://janathavaani.com`;
 "ఈ నిబంధనలు వచ్చే వారం నుంచే అమలులోకి రానున్నాయి. ఎవరు అర్హులు, ఎవరు దరఖాస్తు చేసుకోవాలి అనే పూర్తి గైడ్..."
 
 [00:50 - 01:00] కాల్ టు యాక్షన్ (CTA):
-"ఈ ముఖ్యమైన సమాచారాన్ని మీ మిత్రులకు ఇప్పుడే షేర్ చేయండి. ఫాలో జనతా వాణి!"`;
+"ఈ ముఖ్యమైన సమాచారాన్ని మీ మిత్రులకు ఇప్పుడే షేర్ చేయండి. ఫాలో పబ్లిక్ మూడ్!"`;
 
       case 'interview-transcription':
         return `🎙️ ఇంటర్వ్యూ క్లీనప్ & ట్రాన్స్‌క్రిప్షన్ సారాంశం:
@@ -171,7 +171,7 @@ Official Website: https://janathavaani.com`;
 • మొత్తం నాణ్యత స్కోరు: 98% అద్భుతం. ప్రచురణకు సిద్ధం!`;
 
       default:
-        return 'జనతా వాణి AI అసిస్టెంట్ మీ అభ్యర్థనను విజయవంతంగా ప్రాసెస్ చేసింది.';
+        return 'పబ్లిక్ మూడ్ AI అసిస్టెంట్ మీ అభ్యర్థనను విజయవంతంగా ప్రాసెస్ చేసింది.';
     }
   }
 }

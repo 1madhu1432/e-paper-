@@ -83,7 +83,7 @@ export const RoleSwitcher: React.FC = () => {
                 <LayoutDashboard className="w-3.5 h-3.5" />
                 {location.pathname.startsWith('/admin') ? 'వెబ్‌సైట్‌కు వెళ్లండి' : 'అడ్మిన్ డ్యాష్‌బోర్డ్'}
               </Link>
-              <span>Janatha Vaani Demo</span>
+              <span>Public Mood Demo</span>
             </div>
           </div>
         </>

@@ -81,8 +81,8 @@ export const ProfilePage: React.FC = () => {
               <p className="text-slate-400 text-sm">{currentUser.email}</p>
               <p className="text-slate-500 text-xs mt-0.5 font-telugu">
                 {currentRole === 'Super Admin' ? 'న్యూస్‌రూమ్ అడ్మినిస్ట్రేటర్' :
-                 currentRole === 'Editor' ? 'సీనియర్ ఎడిటర్, జనతా వాణి' :
-                 currentRole === 'Reporter' ? 'విలేఖరి, జనతా వాణి' :
+                 currentRole === 'Editor' ? 'సీనియర్ ఎడిటర్, పబ్లిక్ మూడ్' :
+                 currentRole === 'Reporter' ? 'విలేఖరి, పబ్లిక్ మూడ్' :
                  'నమోదైన పాఠకుడు'}
               </p>
             </div>

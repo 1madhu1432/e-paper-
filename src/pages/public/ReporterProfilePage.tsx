@@ -51,7 +51,7 @@ export const ReporterProfilePage: React.FC = () => {
                   <button 
                     onClick={() => {
                       if (navigator.share) {
-                        navigator.share({ title: `${reporter.nameTe || reporter.name} - జనతా వాణి విలేఖరి`, url: window.location.href }).catch(() => {});
+                        navigator.share({ title: `${reporter.nameTe || reporter.name} - పబ్లిక్ మూడ్ విలేఖరి`, url: window.location.href }).catch(() => {});
                       } else {
                         navigator.clipboard.writeText(window.location.href);
                         alert('రిపోర్టర్ ప్రొఫైల్ లింక్ కాపీ చేయబడింది!');

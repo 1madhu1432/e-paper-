@@ -2,9 +2,9 @@ import React, { useState } from 'react';
 import { Mail, Phone, MapPin, Send, CheckCircle, MessageSquare, Clock } from 'lucide-react';
 
 const OFFICES = [
-  { city: 'హైదరాబాద్ (ప్రధాన కార్యాలయం)', address: '42, మీడియా హబ్, బంజారా హిల్స్, హైదరాబాద్ - 500034', phone: '+91-40-2354-6789', email: 'editor@janathavaani.com' },
-  { city: 'విజయవాడ', address: '15, నంది వీధి, సుభాష్ చౌక్, విజయవాడ - 520002', phone: '+91-866-234-5678', email: 'vijayawada@janathavaani.com' },
-  { city: 'విశాఖపట్నం', address: '7, బీచ్ రోడ్, వెల్తూరు నగర్, విశాఖ - 530002', phone: '+91-891-234-5678', email: 'vizag@janathavaani.com' },
+  { city: 'హైదరాబాద్ (ప్రధాన కార్యాలయం)', address: '42, మీడియా హబ్, బంజారా హిల్స్, హైదరాబాద్ - 500034', phone: '+91-40-2354-6789', email: 'editor@publicmood.com' },
+  { city: 'విజయవాడ', address: '15, నంది వీధి, సుభాష్ చౌక్, విజయవాడ - 520002', phone: '+91-866-234-5678', email: 'vijayawada@publicmood.com' },
+  { city: 'విశాఖపట్నం', address: '7, బీచ్ రోడ్, వెల్తూరు నగర్, విశాఖ - 530002', phone: '+91-891-234-5678', email: 'vizag@publicmood.com' },
 ];
 
 const DEPARTMENTS = ['సంపాదకీయ విభాగం', 'ప్రకటనలు', 'సాంకేతిక సహాయం', 'సభ్యత్వం', 'ఫీడ్‌బ్యాక్', 'ఇతర'];
@@ -50,13 +50,13 @@ export const ContactPage: React.FC = () => {
                   <div className="font-medium text-sm">+91-40-2354-6789</div>
                 </div>
               </a>
-              <a href="mailto:editor@janathavaani.com" className="flex items-center gap-3 text-slate-600 hover:text-red-600 transition-colors group">
+              <a href="mailto:editor@publicmood.com" className="flex items-center gap-3 text-slate-600 hover:text-red-600 transition-colors group">
                 <div className="w-10 h-10 bg-red-50 rounded-xl flex items-center justify-center group-hover:bg-red-100 transition-colors">
                   <Mail className="w-5 h-5 text-red-500" />
                 </div>
                 <div>
                   <div className="text-xs text-slate-400">సంపాదకుడు</div>
-                  <div className="font-medium text-sm">editor@janathavaani.com</div>
+                  <div className="font-medium text-sm">editor@publicmood.com</div>
                 </div>
               </a>
               <div className="flex items-center gap-3 text-slate-600">

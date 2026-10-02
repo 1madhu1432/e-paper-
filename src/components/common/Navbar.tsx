@@ -150,10 +150,10 @@ export const Navbar: React.FC = () => {
         >
           <div className="flex items-baseline gap-2">
             <span className="text-2xl sm:text-4xl lg:text-5xl font-black tracking-tight text-red-600 drop-shadow-xs font-telugu">
-              జనతా వాణి
+              పబ్లిక్ మూడ్
             </span>
             <span className="hidden sm:inline-block text-xs sm:text-sm font-extrabold uppercase tracking-widest text-slate-800 font-sans border-l-2 border-slate-300 pl-2">
-              JANATHA VAANI
+              PUBLIC MOOD
             </span>
           </div>
           <span className="text-[10px] sm:text-xs text-slate-500 font-medium tracking-wide">
@@ -449,7 +449,7 @@ export const Navbar: React.FC = () => {
               }}
               className="font-black text-white text-lg font-telugu mr-4 shrink-0 hidden sm:block"
             >
-              జనతా వాణి
+              పబ్లిక్ మూడ్
             </Link>
 
             {/* Horizontal Scrollable Categories */}
@@ -540,8 +540,8 @@ export const Navbar: React.FC = () => {
             <div>
               <div className="flex items-center justify-between pb-4 border-b border-slate-100 mb-4">
                 <div>
-                  <h3 className="text-2xl font-black text-red-600 font-telugu">జనతా వాణి</h3>
-                  <p className="text-[10px] text-slate-500 font-sans tracking-widest uppercase">JANATHA VAANI</p>
+                  <h3 className="text-2xl font-black text-red-600 font-telugu">పబ్లిక్ మూడ్</h3>
+                  <p className="text-[10px] text-slate-500 font-sans tracking-widest uppercase">PUBLIC MOOD</p>
                 </div>
                 <button onClick={() => setMobileMenuOpen(false)} className="p-2 text-slate-500 hover:text-slate-800">
                   <X className="w-6 h-6" />

@@ -230,7 +230,7 @@ export const HomePage: React.FC = () => {
             </div>
             <h3 className="text-lg font-black font-telugu">మీ ప్రాంతంలో సమస్య ఉందా? వార్త పంపండి!</h3>
             <p className="text-xs text-red-100 leading-relaxed font-telugu">
-              రోడ్లు, తాగునీరు, డ్రైనేజీ లేదా అవినీతి సమస్యలపై ఫోటోలు లేదా వివరాలు పంపండి. జనతా వాణి ప్రభుత్వం దృష్టికి తీసుకెళ్తుంది.
+              రోడ్లు, తాగునీరు, డ్రైనేజీ లేదా అవినీతి సమస్యలపై ఫోటోలు లేదా వివరాలు పంపండి. పబ్లిక్ మూడ్ ప్రభుత్వం దృష్టికి తీసుకెళ్తుంది.
             </p>
             <Link
               to="/report-news"
@@ -260,7 +260,7 @@ export const HomePage: React.FC = () => {
         </aside>
       </div>
 
-      {/* 4. Janatha Vaani Videos Hub */}
+      {/* 4. Public Mood Videos Hub */}
       <VideoSection videos={videos} />
 
       {/* 5. E-Paper Promotion Banner */}

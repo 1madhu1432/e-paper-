@@ -21,7 +21,7 @@ export const VideoSection: React.FC<VideoSectionProps> = ({ videos }) => {
           </div>
           <div>
             <h2 className="text-xl sm:text-2xl font-black text-white font-telugu">
-              జనతా వాణి వీడియోలు
+              పబ్లిక్ మూడ్ వీడియోలు
             </h2>
             <p className="text-xs text-slate-400">ప్రత్యక్ష ప్రసారాలు, బులిటెన్లు & క్షేత్రస్థాయి పరిశోధనా కథనాలు</p>
           </div>

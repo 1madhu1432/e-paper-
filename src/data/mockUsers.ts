@@ -4,7 +4,7 @@ export const DEMO_USERS: User[] = [
   {
     id: 'user-admin',
     name: 'వెంకటేశ్వర్లు గారు (Venkateshwarlu - Super Admin)',
-    email: 'admin@janathavaani.demo',
+    email: 'admin@publicmood.demo',
     phone: '+91 98480 11223',
     role: 'Super Admin',
     avatar: 'https://images.unsplash.com/photo-1472099645785-5658abf4ff4e?auto=format&fit=crop&w=200&q=80',
@@ -28,7 +28,7 @@ export const DEMO_USERS: User[] = [
   {
     id: 'user-editor',
     name: 'శ్రీనివాస రావు వర్మ (Srinivasa Rao - Editor-in-Chief)',
-    email: 'editor@janathavaani.demo',
+    email: 'editor@publicmood.demo',
     phone: '+91 94401 22334',
     role: 'Editor',
     avatar: 'https://images.unsplash.com/photo-1500648767791-00dcc994a43e?auto=format&fit=crop&w=200&q=80',
@@ -52,7 +52,7 @@ export const DEMO_USERS: User[] = [
   {
     id: 'user-reporter',
     name: 'రమేష్ కుమార్ గౌడ్ (Ramesh Kumar - Senior Reporter)',
-    email: 'reporter@janathavaani.demo',
+    email: 'reporter@publicmood.demo',
     phone: '+91 98855 33445',
     role: 'Reporter',
     avatar: 'https://images.unsplash.com/photo-1507003211169-0a1dd7228f2d?auto=format&fit=crop&w=200&q=80',
@@ -76,7 +76,7 @@ export const DEMO_USERS: User[] = [
   {
     id: 'user-social',
     name: 'శ్రావ్య మంథని (Shravya - Social Lead)',
-    email: 'social@janathavaani.demo',
+    email: 'social@publicmood.demo',
     phone: '+91 99890 55667',
     role: 'Social Media Manager',
     avatar: 'https://images.unsplash.com/photo-1534528741775-53994a69daeb?auto=format&fit=crop&w=200&q=80',
@@ -101,7 +101,7 @@ export const DEMO_USERS: User[] = [
   {
     id: 'user-5',
     name: 'కవితా రెడ్డి (Kavitha Reddy - Amaravati Bureau)',
-    email: 'kavitha.r@janathavaani.com',
+    email: 'kavitha.r@publicmood.com',
     phone: '+91 97011 88990',
     role: 'Reporter',
     avatar: 'https://images.unsplash.com/photo-1573496359142-b8d87734a5a2?auto=format&fit=crop&w=200&q=80',
@@ -125,7 +125,7 @@ export const DEMO_USERS: User[] = [
   {
     id: 'user-6',
     name: 'లక్ష్మీ ప్రసన్న (Lakshmi Prasanna - Education Desk)',
-    email: 'lakshmi.p@janathavaani.com',
+    email: 'lakshmi.p@publicmood.com',
     phone: '+91 91234 44556',
     role: 'Reporter',
     avatar: 'https://images.unsplash.com/photo-1580489944761-15a19d654956?auto=format&fit=crop&w=200&q=80',
@@ -149,7 +149,7 @@ export const DEMO_USERS: User[] = [
   {
     id: 'user-7',
     name: 'నాగేంద్ర శర్మ (Nagendra Sharma - Crime Desk)',
-    email: 'nagendra.s@janathavaani.com',
+    email: 'nagendra.s@publicmood.com',
     phone: '+91 93910 66778',
     role: 'Reporter',
     avatar: 'https://images.unsplash.com/photo-1472099645785-5658abf4ff4e?auto=format&fit=crop&w=200&q=80',
@@ -173,7 +173,7 @@ export const DEMO_USERS: User[] = [
   {
     id: 'user-8',
     name: 'భార్గవ్ రాజ్ (Bhargav Raj - Sports Desk)',
-    email: 'bhargav.r@janathavaani.com',
+    email: 'bhargav.r@publicmood.com',
     phone: '+91 94900 88991',
     role: 'Reporter',
     avatar: 'https://images.unsplash.com/photo-1519085360753-af0119f7cbe7?auto=format&fit=crop&w=200&q=80',

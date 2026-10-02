@@ -21,7 +21,7 @@ export const NewsletterSection: React.FC = () => {
         </div>
 
         <h2 className="text-2xl sm:text-3xl font-black font-telugu">
-          జనతా వాణి మార్నింగ్ న్యూస్‌లెటర్
+          పబ్లిక్ మూడ్ మార్నింగ్ న్యూస్‌లెటర్
         </h2>
 
         <p className="text-xs sm:text-sm text-slate-300 leading-relaxed max-w-lg mx-auto font-telugu">

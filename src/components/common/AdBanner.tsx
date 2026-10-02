@@ -34,7 +34,7 @@ export const AdBanner: React.FC<AdBannerProps> = ({ placement, className = '' })
           <span className="uppercase">{placement}</span>
         </div>
         <p className="text-xs text-slate-600 font-medium">
-          జనతా వాణిలో మీ వ్యాపార ప్రకటనల కోసం సంప్రదించండి: <span className="text-red-600 font-bold">ads@janathavaani.com</span>
+          పబ్లిక్ మూడ్ లో మీ వ్యాపార ప్రకటనల కోసం సంప్రదించండి: <span className="text-red-600 font-bold">ads@publicmood.com</span>
         </p>
       </div>
     );

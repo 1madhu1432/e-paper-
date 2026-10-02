@@ -73,7 +73,7 @@ export const AdminAdsPage: React.FC = () => {
         placement,
         desktopBanner,
         mobileBanner: desktopBanner,
-        targetUrl: 'https://janathavaani.com/advertise',
+        targetUrl: 'https://publicmood.com/advertise',
         status: 'active',
         priority: 'high',
       });

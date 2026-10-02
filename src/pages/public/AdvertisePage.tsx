@@ -18,7 +18,7 @@ const STATS = [
 ];
 
 const TESTIMONIALS = [
-  { brand: 'Aparna Constructions', quote: 'జనతా వాణి ద్వారా మా బ్రాండ్ అవేర్‌నెస్ 3 నెలల్లో 40% పెరిగింది.', person: 'మార్కెటింగ్ డైరెక్టర్' },
+  { brand: 'Aparna Constructions', quote: 'పబ్లిక్ మూడ్ ద్వారా మా బ్రాండ్ అవేర్‌నెస్ 3 నెలల్లో 40% పెరిగింది.', person: 'మార్కెటింగ్ డైరెక్టర్' },
   { brand: 'Sahasra Hospital', quote: 'మొబైల్ యూజర్లకు చాలా బాగా చేరుతుంది, ROI చాలా సంతోషకరంగా ఉంది.', person: 'CEO' },
 ];
 
@@ -39,13 +39,13 @@ export const AdvertisePage: React.FC = () => {
           <div className="inline-flex items-center gap-2 bg-blue-600/20 border border-blue-500/30 text-blue-300 text-sm px-4 py-2 rounded-full mb-6">
             <TrendingUp className="w-4 h-4" /> 24 లక్షల+ తెలుగు పాఠకులకు చేరండి
           </div>
-          <h1 className="text-4xl font-bold text-white mb-4">జనతా వాణిలో ప్రకటన ఇవ్వండి</h1>
+          <h1 className="text-4xl font-bold text-white mb-4">పబ్లిక్ మూడ్ లో ప్రకటన ఇవ్వండి</h1>
           <p className="text-blue-200 text-lg mb-8">తెలుగు ప్రజల్లో మీ బ్రాండ్‌ను శక్తివంతంగా ప్రచారం చేయండి</p>
           <div className="flex gap-4 justify-center">
             <a href="tel:+914023546789" className="bg-white text-blue-900 px-6 py-3 rounded-xl font-bold hover:bg-blue-50 transition-colors flex items-center gap-2">
               <Phone className="w-4 h-4" /> ఇప్పుడే కాల్ చేయండి
             </a>
-            <a href="mailto:ads@janathavaani.com" className="border-2 border-white text-white px-6 py-3 rounded-xl font-bold hover:bg-white/10 transition-colors flex items-center gap-2">
+            <a href="mailto:ads@publicmood.com" className="border-2 border-white text-white px-6 py-3 rounded-xl font-bold hover:bg-white/10 transition-colors flex items-center gap-2">
               <Mail className="w-4 h-4" /> మెయిల్ చేయండి
             </a>
           </div>

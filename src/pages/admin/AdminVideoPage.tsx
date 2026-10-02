@@ -47,7 +47,7 @@ export const AdminVideoPage: React.FC = () => {
       thumbnail: `https://img.youtube.com/vi/${youtubeId}/hqdefault.jpg`,
       category,
       duration,
-      reporterName: 'జనతా వాణి బ్యూరో',
+      reporterName: 'పబ్లిక్ మూడ్ బ్యూరో',
       publishedAt: 'ఇప్పుడే',
       isFeatured: true,
       isBreaking: false,

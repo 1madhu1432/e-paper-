@@ -41,7 +41,7 @@ export const EPaperPromoBlock: React.FC = () => {
           </div>
 
           <h2 className="text-2xl sm:text-3xl lg:text-4xl font-black text-white font-telugu">
-            జనతా వాణి ఈ-పేపర్
+            పబ్లిక్ మూడ్ ఈ-పేపర్
           </h2>
 
           <p className="text-sm sm:text-base text-slate-200 leading-relaxed font-telugu max-w-xl">

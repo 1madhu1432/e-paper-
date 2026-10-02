@@ -15,7 +15,7 @@ export const PublicLoginPage: React.FC = () => {
   const [phoneNumber, setPhoneNumber] = useState('9848012345');
   const [otp, setOtp] = useState('123456');
   const [otpSent, setOtpSent] = useState(false);
-  const [email, setEmail] = useState('reader@janathavaani.com');
+  const [email, setEmail] = useState('reader@publicmood.com');
   const [password, setPassword] = useState('password123');
   const [fullName, setFullName] = useState('శ్రీకాంత్ వర్మ');
   const [district, setDistrict] = useState('హైదరాబాద్ (Hyderabad)');
@@ -82,10 +82,10 @@ export const PublicLoginPage: React.FC = () => {
         <div className="bg-gradient-to-r from-red-600 to-red-700 p-6 text-white text-center relative overflow-hidden">
           <div className="absolute -right-6 -bottom-6 w-24 h-24 bg-white/10 rounded-full blur-xl pointer-events-none" />
           <div className="inline-flex items-center justify-center w-12 h-12 bg-white text-red-600 rounded-2xl shadow-md mb-3 font-black text-2xl">
-            జ
+            ప
           </div>
-          <h2 className="text-2xl font-black">జనతా వాణి</h2>
-          <p className="text-xs text-red-100 mt-1 font-sans">పాఠకుల ఖాతా ప్రవేశం (Reader Access)</p>
+          <h2 className="text-2xl font-black">పబ్లిక్ మూడ్</h2>
+          <p className="text-xs text-red-100 mt-1 font-sans">PUBLIC MOOD • పాఠకుల ఖాతా ప్రవేశం</p>
 
           {/* Tab Switcher */}
           <div className="flex bg-black/20 p-1 rounded-xl mt-5 text-xs font-bold">
@@ -249,7 +249,7 @@ export const PublicLoginPage: React.FC = () => {
                       required
                       value={email}
                       onChange={(e) => setEmail(e.target.value)}
-                      placeholder="reader@janathavaani.com"
+                      placeholder="reader@publicmood.com"
                       className="w-full pl-9 pr-3 py-2.5 bg-slate-50 border border-slate-200 rounded-xl focus:bg-white focus:outline-none focus:border-red-500 text-xs transition-colors"
                     />
                   </div>

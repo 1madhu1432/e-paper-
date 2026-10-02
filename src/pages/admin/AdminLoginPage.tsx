@@ -8,7 +8,7 @@ export const AdminLoginPage: React.FC = () => {
   const { loginAs, setRole, allDemoUsers } = useAuth();
   const navigate = useNavigate();
 
-  const [email, setEmail] = useState('admin@janathavaani.com');
+  const [email, setEmail] = useState('admin@publicmood.com');
   const [password, setPassword] = useState('password123');
   const [selectedRole, setSelectedRole] = useState<Role>('Super Admin');
   const [isLoading, setIsLoading] = useState(false);
@@ -35,10 +35,10 @@ export const AdminLoginPage: React.FC = () => {
       <header className="px-6 py-4 border-b border-slate-800 flex items-center justify-between relative z-10">
         <Link to="/" className="flex items-center gap-3">
           <div className="w-10 h-10 rounded-xl bg-gradient-to-br from-red-600 to-red-800 flex items-center justify-center text-white font-black text-xl shadow-lg shadow-red-900/40">
-            జ
+            ప
           </div>
           <div>
-            <span className="text-xl font-black font-telugu text-white tracking-tight">జనతా వాణి</span>
+            <span className="text-xl font-black font-telugu text-white tracking-tight">పబ్లిక్ మూడ్</span>
             <span className="text-[10px] text-red-400 font-bold uppercase tracking-wider block font-sans">
               NEWSROOM CMS v2.4
             </span>
@@ -101,7 +101,7 @@ export const AdminLoginPage: React.FC = () => {
                   onChange={(e) => setEmail(e.target.value)}
                   required
                   className="w-full bg-slate-950 border border-slate-800 rounded-xl py-2.5 pl-9 pr-3 text-xs text-white placeholder-slate-500 focus:outline-none focus:border-red-500 transition-colors"
-                  placeholder="user@janathavaani.com"
+                  placeholder="user@publicmood.com"
                 />
               </div>
             </div>
@@ -157,7 +157,7 @@ export const AdminLoginPage: React.FC = () => {
 
       {/* Footer Disclaimer */}
       <footer className="py-4 text-center text-xs text-slate-400 border-t border-slate-900 relative z-10">
-        © {new Date().getFullYear()} జనతా వాణి డిజిటల్ మీడియా వర్క్‌స్పేస్. సర్వ హక్కులు ప్రత్యేకించబడ్డాయి.
+        © {new Date().getFullYear()} పబ్లిక్ మూడ్ (Public Mood Media Workspace). సర్వ హక్కులు ప్రత్యేకించబడ్డాయి.
       </footer>
     </div>
   );

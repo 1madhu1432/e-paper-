@@ -26,21 +26,21 @@ export const Footer: React.FC = () => {
           {/* Brand Col */}
           <div className="lg:col-span-2 space-y-4">
             <Link to="/" className="inline-block">
-              <span className="text-3xl font-black text-red-500 font-telugu">జనతా వాణి</span>
-              <span className="block text-xs font-bold uppercase tracking-widest text-slate-400">JANATHA VAANI</span>
+              <span className="text-3xl font-black text-red-500 font-telugu">పబ్లిక్ మూడ్</span>
+              <span className="block text-xs font-bold uppercase tracking-widest text-slate-400">PUBLIC MOOD</span>
             </Link>
             <p className="text-xs sm:text-sm text-slate-400 leading-relaxed font-telugu max-w-md">
-              జనతా వాణి - రెండు తెలుగు రాష్ట్రాల ప్రజల విశ్వసనీయ సమాచార వేదిక. రాజకీయ, సామాజిక, నేర, క్రీడా, ఉద్యోగ, వినోద వార్తలను నిక్కచ్చిగా, నిష్పక్షపాతంగా మీ ముంగిటకు చేర్చుతోంది.
+              పబ్లిక్ మూడ్ - రెండు తెలుగు రాష్ట్రాల ప్రజల విశ్వసనీయ సమాచార వేదిక. రాజకీయ, సామాజిక, నేర, క్రీడా, ఉద్యోగ, వినోద వార్తలను నిక్కచ్చిగా, నిష్పక్షపాతంగా మీ ముంగిటకు చేర్చుతోంది.
             </p>
 
             <div className="space-y-1.5 text-xs text-slate-400">
               <p className="flex items-center gap-2">
                 <MapPin className="w-4 h-4 text-red-500 shrink-0" />
-                <span>జనతా వాణి భవన్, బంజారా హిల్స్ రోడ్ నం. 12, హైదరాబాద్ - 500034</span>
+                <span>పబ్లిక్ మూడ్ మీడియా భవన్, బంజారా హిల్స్ రోడ్ నం. 12, హైదరాబాద్ - 500034</span>
               </p>
               <p className="flex items-center gap-2">
                 <Mail className="w-4 h-4 text-red-500 shrink-0" />
-                <span>editor@janathavaani.com | ads@janathavaani.com</span>
+                <span>editor@publicmood.com | ads@publicmood.com</span>
               </p>
               <p className="flex items-center gap-2">
                 <Phone className="w-4 h-4 text-red-500 shrink-0" />
@@ -158,7 +158,7 @@ export const Footer: React.FC = () => {
 
         {/* Bottom copyright & attribution */}
         <div className="pt-6 flex flex-col sm:flex-row items-center justify-between text-xs text-slate-500 gap-3">
-          <p>© {new Date().getFullYear()} జనతా వాణి (Janatha Vaani Digital Network). సర్వ హక్కులు ప్రత్యేకించబడ్డాయి.</p>
+          <p>© {new Date().getFullYear()} పబ్లిక్ మూడ్ (Public Mood Digital Network). సర్వ హక్కులు ప్రత్యేకించబడ్డాయి.</p>
           <div className="flex items-center gap-4">
             <span>RNI Regd. No. TEL/2026/89402</span>
             <span>•</span>

@@ -60,7 +60,7 @@ export const PreferencesPage: React.FC = () => {
             <ArrowLeft className="w-4 h-4" />
             <span>హోమ్‌పేజీకి తిరిగి వెళ్లండి</span>
           </Link>
-          <span className="text-xs text-slate-400 font-medium">Janatha Vaani Settings</span>
+          <span className="text-xs text-slate-400 font-medium">Public Mood Settings</span>
         </div>
 
         {/* Page Header */}
@@ -134,7 +134,7 @@ export const PreferencesPage: React.FC = () => {
                   fontSize === 'small' ? 'text-sm' : fontSize === 'medium' ? 'text-base' : 'text-lg'
                 }`}
               >
-                జనతా వాణి: రెండు తెలుగు రాష్ట్రాల తాజా రాజకీయ, సామాజిక, క్రీడా మరియు వినోద వార్తలు.
+                పబ్లిక్ మూడ్: రెండు తెలుగు రాష్ట్రాల తాజా రాజకీయ, సామాజిక, క్రీడా మరియు వినోద వార్తలు.
               </p>
             </div>
           </div>

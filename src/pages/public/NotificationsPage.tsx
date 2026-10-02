@@ -136,7 +136,7 @@ export const NotificationsPage: React.FC = () => {
                       </h4>
                       <p className="text-xs text-slate-600 line-clamp-2 font-telugu">{notif.messageTe}</p>
                       <p className="text-[11px] text-slate-400 mt-1.5">
-                        {(notif.category === 'Breaking' || notif.category === 'Breaking News') ? '🔴 బ్రేకింగ్ న్యూస్' : 'జనతా వాణి అప్‌డేట్'}
+                        {(notif.category === 'Breaking' || notif.category === 'Breaking News') ? '🔴 బ్రేకింగ్ న్యూస్' : 'పబ్లిక్ మూడ్ అప్‌డేట్'}
                       </p>
                     </div>
 

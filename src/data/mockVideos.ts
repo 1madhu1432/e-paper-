@@ -5,7 +5,7 @@ export const MOCK_VIDEOS: VideoItem[] = [
     id: 'vid-001',
     title: 'Telangana Budget 2026 Live Analysis: Big boosts for Rythu Bharosa and Education',
     titleTe: 'తెలంగాణ బడ్జెట్ 2026 ప్రత్యక్ష విశ్లేషణ: రైతులకు వరాలు.. నిధుల కేటాయింపులపై లోతైన చర్చ',
-    description: 'Special discussion in Janatha Vaani studio with senior economic and political experts.',
+    description: 'Special discussion in Public Mood studio with senior economic and political experts.',
     youtubeId: 'dQw4w9WgXcQ',
     thumbnail: 'https://images.unsplash.com/photo-1541872703-74c5e44368f9?auto=format&fit=crop&w=800&q=80',
     category: 'telangana',
@@ -35,8 +35,8 @@ export const MOCK_VIDEOS: VideoItem[] = [
   },
   {
     id: 'vid-003',
-    title: 'Janatha Vaani 9 PM Super Fast News: Top 50 Headlines in 10 Minutes',
-    titleTe: 'జనతా వాణి 9 PM సూపర్ ఫాస్ట్ న్యూస్: 10 నిమిషాల్లో టాప్ 50 ముఖ్యాంశాలు',
+    title: 'Public Mood 9 PM Super Fast News: Top 50 Headlines in 10 Minutes',
+    titleTe: 'పబ్లిక్ మూడ్ 9 PM సూపర్ ఫాస్ట్ న్యూస్: 10 నిమిషాల్లో టాప్ 50 ముఖ్యాంశాలు',
     description: 'Comprehensive evening bulletin rounding up national and regional events.',
     youtubeId: 'dQw4w9WgXcQ',
     thumbnail: 'https://images.unsplash.com/photo-1494172961521-33799ddd43a5?auto=format&fit=crop&w=800&q=80',
@@ -147,7 +147,7 @@ export const MOCK_VIDEOS: VideoItem[] = [
   },
   {
     id: 'vid-010',
-    title: 'Janatha Vaani Morning Express: Fast 30 District News at 7 AM',
+    title: 'Public Mood Morning Express: Fast 30 District News at 7 AM',
     titleTe: 'మార్నింగ్ ఎక్స్‌ప్రెస్: రెండు రాష్ట్రాల 33 జిల్లాల ఉదయపు ముఖ్యాంశాలు',
     description: 'Fast morning news coverage covering weather, agriculture, and market rates.',
     youtubeId: 'dQw4w9WgXcQ',

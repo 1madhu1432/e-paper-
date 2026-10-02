@@ -12,14 +12,14 @@ import {
 } from 'lucide-react';
 
 export const AdminSettingsPage: React.FC = () => {
-  const [siteName, setSiteName] = useState('JANATHA VAANI');
-  const [siteNameTe, setSiteNameTe] = useState('జనతా వాణి');
+  const [siteName, setSiteName] = useState('PUBLIC MOOD');
+  const [siteNameTe, setSiteNameTe] = useState('పబ్లిక్ మూడ్');
   const [tagline, setTagline] = useState('సత్యం - స్పష్టత - ప్రజా స్వరం');
   const [contactPhone, setContactPhone] = useState('+91 98765 43210');
-  const [contactEmail, setContactEmail] = useState('editor@janathavaani.com');
-  const [whatsappChannel, setWhatsappChannel] = useState('https://whatsapp.com/channel/janathavaani');
-  const [youtubeChannel, setYoutubeChannel] = useState('https://youtube.com/@janathavaaninews');
-  const [analyticsId, setAnalyticsId] = useState('G-JVNEWS2024');
+  const [contactEmail, setContactEmail] = useState('editor@publicmood.com');
+  const [whatsappChannel, setWhatsappChannel] = useState('https://whatsapp.com/channel/publicmood');
+  const [youtubeChannel, setYoutubeChannel] = useState('https://youtube.com/@publicmoodnews');
+  const [analyticsId, setAnalyticsId] = useState('G-PMNEWS2024');
 
   const [savedSuccess, setSavedSuccess] = useState(false);
 

@@ -68,7 +68,7 @@ export class MockAdService {
       adTitle: adData.adTitle || '',
       desktopBanner: adData.desktopBanner || 'https://images.unsplash.com/photo-1545324418-cc1a3fa10c00?auto=format&fit=crop&w=1200&h=160&q=80',
       mobileBanner: adData.mobileBanner || 'https://images.unsplash.com/photo-1545324418-cc1a3fa10c00?auto=format&fit=crop&w=600&h=200&q=80',
-      targetUrl: adData.targetUrl || 'https://janathavaani.com',
+      targetUrl: adData.targetUrl || 'https://publicmood.com',
       placement: adData.placement || 'home-top',
       priority: adData.priority || 'medium',
       status: adData.status || 'active',

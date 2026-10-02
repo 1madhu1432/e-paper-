@@ -64,7 +64,7 @@ export class MockVideoService {
       thumbnail: data.thumbnail || 'https://images.unsplash.com/photo-1541872703-74c5e44368f9?auto=format&fit=crop&w=800&q=80',
       category: data.category || 'latest',
       duration: data.duration || '05:00',
-      reporterName: data.reporterName || 'జనతా వాణి న్యూస్ బ్యూరో',
+      reporterName: data.reporterName || 'పబ్లిక్ మూడ్ న్యూస్ బ్యూరో',
       publishedAt: new Date().toISOString(),
       isFeatured: !!data.isFeatured,
       isBreaking: !!data.isBreaking,

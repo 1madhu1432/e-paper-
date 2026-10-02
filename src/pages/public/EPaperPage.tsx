@@ -31,7 +31,7 @@ export const EPaperPage: React.FC = () => {
       <div className="flex items-center gap-2 text-xs text-slate-500 mb-4">
         <Link to="/" className="hover:text-red-600">హోమ్</Link>
         <ChevronRight className="w-3.5 h-3.5" />
-        <span className="text-slate-800 font-bold">జనతా వాణి ఈ-పేపర్ (E-Paper)</span>
+        <span className="text-slate-800 font-bold">పబ్లిక్ మూడ్ ఈ-పేపర్ (Public Mood E-Paper)</span>
       </div>
 
       {/* Top Banner */}

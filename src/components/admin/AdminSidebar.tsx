@@ -119,11 +119,11 @@ export const AdminSidebar: React.FC<AdminSidebarProps> = ({ onCloseMobile }) => 
         <div className="p-4 border-b border-slate-800 flex items-center justify-between">
           <Link to="/admin" className="flex items-center gap-2">
             <div className="w-8 h-8 rounded-lg bg-red-600 flex items-center justify-center text-white font-black text-lg">
-              జ
+              ప
             </div>
             <div>
               <span className="font-black text-white text-base tracking-tight font-telugu block leading-none">
-                జనతా వాణి CMS
+                పబ్లిక్ మూడ్ CMS
               </span>
               <span className="text-[10px] text-amber-400 font-bold uppercase tracking-wider font-sans">
                 NEWSROOM v2.4

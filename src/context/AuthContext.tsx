@@ -21,7 +21,7 @@ const AuthContext = createContext<AuthContextType | undefined>(undefined);
 const DEFAULT_PUBLIC_READER: User = {
   id: 'guest-reader',
   name: 'పాఠకుడు (Reader Guest)',
-  email: 'reader@janathavaani.com',
+  email: 'reader@publicmood.com',
   role: 'Reader',
   avatar: 'https://images.unsplash.com/photo-1535713875002-d1d0cf377fde?auto=format&fit=crop&w=200&q=80',
   status: 'active',
@@ -64,7 +64,7 @@ export const AuthProvider: React.FC<{ children: React.ReactNode }> = ({ children
       ...currentUser,
       role,
       name: `${role} Demo User`,
-      email: `${role.toLowerCase().replace(/\s+/g, '')}@janathavaani.demo`,
+      email: `${role.toLowerCase().replace(/\s+/g, '')}@publicmood.demo`,
     };
     setCurrentUser(found);
   };
@@ -86,7 +86,7 @@ export const AuthProvider: React.FC<{ children: React.ReactNode }> = ({ children
     const readerUser: User = {
       id: `reader-${Date.now()}`,
       name: name.trim() || 'పాఠకుడు (Reader)',
-      email: emailOrPhone.includes('@') ? emailOrPhone : `${emailOrPhone}@janathavaani.reader`,
+      email: emailOrPhone.includes('@') ? emailOrPhone : `${emailOrPhone}@publicmood.reader`,
       phone: !emailOrPhone.includes('@') ? emailOrPhone : '+91 98480 12345',
       role: 'Reader',
       avatar: 'https://images.unsplash.com/photo-1535713875002-d1d0cf377fde?auto=format&fit=crop&w=200&q=80',
@@ -114,7 +114,7 @@ export const AuthProvider: React.FC<{ children: React.ReactNode }> = ({ children
     setCurrentUser({
       id: 'guest-reader',
       name: 'పాఠకుడు (Reader Guest)',
-      email: 'reader@janathavaani.com',
+      email: 'reader@publicmood.com',
       role: 'Reader',
       avatar: 'https://images.unsplash.com/photo-1535713875002-d1d0cf377fde?auto=format&fit=crop&w=200&q=80',
       status: 'active',

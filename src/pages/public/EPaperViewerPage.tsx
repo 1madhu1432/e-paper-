@@ -89,7 +89,7 @@ export const EPaperViewerPage: React.FC = () => {
   const handleShare = () => {
     if (navigator.share) {
       navigator.share({
-        title: `${edition.editionNameTe} - జనతా వాణి ఈ-పేపర్`,
+        title: `${edition.editionNameTe} - పబ్లిక్ మూడ్ ఈ-పేపర్`,
         url: window.location.href,
       }).catch(() => {});
     } else {
